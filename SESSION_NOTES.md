@@ -377,31 +377,52 @@ Implemented a full hierarchy refactor across **all 5 packages** in one session.
 - **Root Cause Identified**:
   - Vimeo unlisted videos require the **unlisted privacy hash** (`?h=...` or `1215063094/8738821432`).
   - Accessing an unlisted video embed URL without its `h` parameter returns a 403 Forbidden / Cloudflare verification block.
-- **Backend URL Parser ([`functions/src/routes/videos.ts`](file:///e:/ConceptsToClinics/functions/src/routes/videos.ts))**:
-  - Added `parseVimeoEmbedUrl()` helper function that automatically extracts the video ID and unlisted hash from:
-    - Full Vimeo iframe HTML embed codes (`<iframe src="...">`)
-    - Unlisted URLs (`https://vimeo.com/1215063094/8738821432` or `https://player.vimeo.com/video/1215063094?h=8738821432`)
-    - Short inputs (`1215063094/8738821432` or `1215063094?h=8738821432`)
-  - Live deployed to Firebase Cloud Functions (`https://asia-south1-concepts-to-clinics-dev.cloudfunctions.net/api`).
-- **Mobile Apps Player Updates ([`VideoPlayerScreen.tsx`](file:///e:/ConceptsToClinics/mobile-app/src/screens/VideoPlayerScreen.tsx))**:
-  - Added `referrerpolicy="no-referrer-when-downgrade"` to `<iframe>` and `baseUrl: 'https://vimeo.com'` to `WebView` source in both `mobile-app` and `play-app`.
-- **Admin Dashboard Updates ([`CourseDetailPage.tsx`](file:///e:/ConceptsToClinics/admin-dashboard/src/pages/CourseDetailPage.tsx))**:
-  - Updated video creation modal hints so tutors can paste the full Vimeo link, unlisted ID/hash, or full iframe HTML embed code directly.
+380: - **Backend URL Parser ([`functions/src/routes/videos.ts`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/src/routes/videos.ts))**:
+381:   - Added `parseVimeoEmbedUrl()` helper function that automatically extracts the video ID and unlisted hash from:
+382:     - Full Vimeo iframe HTML embed codes (`<iframe src="...">`)
+383:     - Unlisted URLs (`https://vimeo.com/1215063094/8738821432` or `https://player.vimeo.com/video/1215063094?h=8738821432`)
+384:     - Short inputs (`1215063094/8738821432` or `1215063094?h=8738821432`)
+385:   - Live deployed to Firebase Cloud Functions (`https://asia-south1-concepts-to-clinics-dev.cloudfunctions.net/api`).
+386: - **Mobile Apps Player Updates ([`VideoPlayerScreen.tsx`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/src/screens/VideoPlayerScreen.tsx))**:
+387:   - Added `referrerpolicy="no-referrer-when-downgrade"` to `<iframe>` and `baseUrl: 'https://vimeo.com'` to `WebView` source in both `mobile-app` and `play-app`.
+388: - **Admin Dashboard Updates ([`CourseDetailPage.tsx`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/admin-dashboard/src/pages/CourseDetailPage.tsx))**:
+389:   - Updated video creation modal hints so tutors can paste the full Vimeo link, unlisted ID/hash, or full iframe HTML embed code directly.
+390: 
+391: ### 23. 🚫 Long-Press Context Menu Disabling & Vimeo Branding Controls (`functions`, `mobile-app`, `play-app`)
+392: - **Long-Press Menu Prevention ([`VideoPlayerScreen.tsx`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/src/screens/VideoPlayerScreen.tsx))**:
+393:   - Added CSS rule `-webkit-touch-callout: none !important; -webkit-user-select: none !important; user-select: none !important;` to embedded HTML player.
+394:   - Intercepted `contextmenu` and `selectstart` events in HTML/JS with `e.preventDefault(); e.stopPropagation(); return false;` to block the tap-and-hold context menu.
+395:   - Synchronized changes to both `mobile-app` and `play-app`.
+396: - **Vimeo Player Parameters ([`functions/src/routes/videos.ts`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/src/routes/videos.ts))**:
+397:   - Appended `badge=0`, `autopause=0`, and `vimeo_logo=0` query parameters to embed URLs returned by the backend.
+398:   - Live deployed to Firebase Cloud Functions (`https://asia-south1-concepts-to-clinics-dev.cloudfunctions.net/api`).
+399: 
+400: ### 24. 🎬 Migration to Bunny Stream, Player Inset & Fullscreen UI Fixes, and v1.0.2 Release Build (`functions`, `admin-dashboard`, `mobile-app`, `play-app`)
+401: - **Migrated Streaming Architecture to Bunny.net Stream**:
+402:   - Replaced legacy Vimeo infrastructure with **Bunny Stream** (`Bunny.net`).
+403:   - Implemented secure token-authenticated embed URL generation (`generateSignedEmbedUrl`) in [`functions/src/utils/bunnyStream.ts`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/src/utils/bunnyStream.ts) and backend endpoint [`functions/src/routes/videos.ts`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/src/routes/videos.ts).
+404:   - Integrated direct browser-to-Bunny Video Upload API in Admin Dashboard [`UploadContext.tsx`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/admin-dashboard/src/context/UploadContext.tsx).
+405: - **Environment & Repository Security**:
+406:   - Audited and created environment template files: [`functions/.env`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/.env), [`admin-dashboard/.env`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/admin-dashboard/.env), and [`marketing-site/.env.local`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/.env.local).
+407:   - Secured GitHub repository by converting visibility to **Private** to protect plain-text secrets and API credentials.
+408: - **Mobile Player UI & Safe Area Overlap Fixes ([`VideoPlayerScreen.tsx`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/src/screens/VideoPlayerScreen.tsx))**:
+409:   - **42×42 Centered Icon-Only Fullscreen Button**: Updated the fullscreen overlay toggle to a 42×42 circular pill button (`width: 42, height: 42, borderRadius: 21`) displaying icon-only text (`'⤢'` / `'⤓'`) with `includeFontPadding: false` and `textAlignVertical: 'center'` for exact baseline optical centering.
+410:   - **Landscape Safe View Protection**: Integrated `useSafeAreaInsets()` from `react-native-safe-area-context` to apply dynamic edge padding (`top`, `bottom`, `left`, `right`) when in landscape mode. This prevents Android system navigation bars, gesture handles, and camera cutouts from overlapping player options (quality and speed menus).
+411:   - Synchronized identical layout fixes across both `mobile-app` and `play-app`.
+412: - **Low-End & 32-Bit Architecture Support (Redmi A3 / Android Go)**:
+413:   - Configured `reactNativeArchitectures=armeabi-v7a,arm64-v8a,x86,x86_64` in `gradle.properties` to support older 32-bit hardware alongside 64-bit devices.
+414:   - Set `newArchEnabled=false` to optimize RAM footprint and execution stability on low-end budget processors.
+415: - **Version Bump & Local CLI Release APK Build**:
+416:   - Updated app version to **`1.0.2`** (`versionCode`: `3`) in [`mobile-app/package.json`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/package.json) and [`mobile-app/app.json`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/app.json).
+417:   - Installed **Node.js LTS (v24.19.0)** and **Eclipse Temurin JDK 17** locally.
+418:   - Executed Expo prebuild and compiled standalone Release APK: [`mobile-app/android/app/build/outputs/apk/release/app-release.apk`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/android/app/build/outputs/apk/release/app-release.apk) (**83.2 MB**).
+419: 
+420: ---
+421: 
+422: ## Next Steps / Active Tasks 🚀
+423: - Test the generated v1.0.2 Release APK (`app-release.apk`) on physical devices (including Redmi A3 / 32-bit Android Go devices).
+424: - Verify landscape video playback, safe area inset padding, quality/speed controls, and fullscreen toggle behavior.
 
-### 23. 🚫 Long-Press Context Menu Disabling & Vimeo Branding Controls (`functions`, `mobile-app`, `play-app`)
-- **Long-Press Menu Prevention ([`VideoPlayerScreen.tsx`](file:///e:/ConceptsToClinics/mobile-app/src/screens/VideoPlayerScreen.tsx))**:
-  - Added CSS rule `-webkit-touch-callout: none !important; -webkit-user-select: none !important; user-select: none !important;` to embedded HTML player.
-  - Intercepted `contextmenu` and `selectstart` events in HTML/JS with `e.preventDefault(); e.stopPropagation(); return false;` to block the tap-and-hold context menu.
-  - Synchronized changes to both `mobile-app` and `play-app`.
-- **Vimeo Player Parameters ([`functions/src/routes/videos.ts`](file:///e:/ConceptsToClinics/functions/src/routes/videos.ts))**:
-  - Appended `badge=0`, `autopause=0`, and `vimeo_logo=0` query parameters to embed URLs returned by the backend.
-  - Live deployed to Firebase Cloud Functions (`https://asia-south1-concepts-to-clinics-dev.cloudfunctions.net/api`).
-
----
-
-## Next Steps / Active Tasks 🚀
-- Download and test the standalone Android APK on a physical phone.
-- Verify floating watermark drift and unauthorized login attempt logging on live Firebase project.
 
 
 

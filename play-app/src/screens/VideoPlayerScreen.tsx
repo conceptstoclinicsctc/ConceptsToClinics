@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import { usePreventScreenCapture } from 'expo-screen-capture';
 import { RouteProp } from '@react-navigation/native';
@@ -28,55 +28,60 @@ type Props = {
   route: RouteProp<AppStackParamList, 'VideoPlayer'>;
 };
 
+// ── FIXED: Now uses Bunny's actual Player.js API instead of guessing at raw postMessage shapes ──
 const BUNNY_BRIDGE_JS = `
 (function() {
-  function handleMsg(e) {
-    try {
-      var raw = e.data;
-      var data = typeof raw === 'string' ? JSON.parse(raw) : raw;
-      if (!data) return;
+  function initPlayer() {
+    var iframe = document.getElementById('bunny-player');
+    if (!iframe || typeof playerjs === 'undefined') {
+      setTimeout(initPlayer, 200);
+      return;
+    }
 
-      var evt = (data.event || data.type || data.name || (data.data && data.data.event) || '').toLowerCase();
-      var payload = data.data || data.value || data;
+    var player = new playerjs.Player(iframe);
 
-      var currentTime = Number(payload.currentTime || payload.seconds || payload.time || data.currentTime || data.seconds || 0);
-      var duration = Number(payload.duration || data.duration || 0);
-
-      if (evt.indexOf('timeupdate') !== -1 || evt.indexOf('progress') !== -1) {
+    player.on('ready', function() {
+      player.on('timeupdate', function(data) {
         window.ReactNativeWebView.postMessage(JSON.stringify({
           type: 'timeupdate',
-          seconds: currentTime,
-          duration: duration
+          seconds: (data && data.seconds) || 0,
+          duration: (data && data.duration) || 0
         }));
-      } else if (evt.indexOf('pause') !== -1) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: 'pause',
-          seconds: currentTime,
-          duration: duration
-        }));
-      } else if (evt.indexOf('ended') !== -1 || evt.indexOf('complete') !== -1) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: 'ended',
-          seconds: currentTime,
-          duration: duration
-        }));
-      } else if (evt.indexOf('fullscreen') !== -1) {
-        var isFS = payload.isFullscreen !== undefined ? payload.isFullscreen : (data.isFullscreen || false);
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: 'fullscreen',
-          isFullscreen: isFS
-        }));
-      }
-    } catch(err) {}
+      });
+
+      player.on('pause', function() {
+        player.getCurrentTime(function(seconds) {
+          player.getDuration(function(duration) {
+            window.ReactNativeWebView.postMessage(JSON.stringify({
+              type: 'pause',
+              seconds: seconds || 0,
+              duration: duration || 0
+            }));
+          });
+        });
+      });
+
+      player.on('ended', function() {
+        player.getCurrentTime(function(seconds) {
+          player.getDuration(function(duration) {
+            window.ReactNativeWebView.postMessage(JSON.stringify({
+              type: 'ended',
+              seconds: seconds || 0,
+              duration: duration || 0
+            }));
+          });
+        });
+      });
+    });
   }
 
-  window.addEventListener('message', handleMsg, false);
-  document.addEventListener('message', handleMsg, false);
+  initPlayer();
 
   // ── Fullscreen handler: forward web fullscreen events to React Native for screen rotation ──
   function notifyFullscreenState() {
     var isFS = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
     
+    // Ensure watermark #wm is inside the fullscreen container so it stays visible
     var wm = document.getElementById('wm');
     var container = document.getElementById('player-container');
     var fsElem = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement;
@@ -100,6 +105,7 @@ const BUNNY_BRIDGE_JS = `
   document.addEventListener('webkitfullscreenchange', notifyFullscreenState, true);
   document.addEventListener('mozfullscreenchange', notifyFullscreenState, true);
 
+  // Listen to postMessage from Bunny iframe if it sends custom fullscreen events
   window.addEventListener('message', function(e) {
     try {
       var data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
@@ -145,6 +151,7 @@ const VideoPlayerScreen = ({ navigation, route }: Props) => {
   const { videoId, courseId, playlistId, videoTitle, videoDescription, resumeSeconds, videoDuration } = route.params;
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
+  const insets = useSafeAreaInsets();
 
   const { displayName, studentId } = useAuthStore();
 
@@ -318,6 +325,7 @@ const VideoPlayerScreen = ({ navigation, route }: Props) => {
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script type="text/javascript" src="https://assets.mediadelivery.net/playerjs/playerjs-latest.min.js"></script>
   <style>
     * {
       margin: 0; padding: 0; box-sizing: border-box;
@@ -339,7 +347,7 @@ const VideoPlayerScreen = ({ navigation, route }: Props) => {
       border: none;
       -webkit-touch-callout: none !important;
     }
-    /* Floating watermark — inside WebView so it survives native fullscreen */
+    /* ── Floating watermark — lives inside WebView so it survives native fullscreen ── */
     #wm {
       position: fixed;
       z-index: 2147483647;
@@ -379,7 +387,7 @@ const VideoPlayerScreen = ({ navigation, route }: Props) => {
       return false;
     }, true);
 
-    // Floating drift animation
+    // Floating drift animation — pure JS, no CSS @keyframes needed
     (function() {
       var wm = document.getElementById('wm');
       if (!wm) return;
@@ -390,10 +398,15 @@ const VideoPlayerScreen = ({ navigation, route }: Props) => {
       var tx = Math.random() * (vw - wmW), ty = Math.random() * (vh - wmH);
       var startTime = null;
       var DURATION = 16000;
-      function easeInOut(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+      function easeInOut(t) {
+        return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+      }
+
       function step(ts) {
         if (!startTime) startTime = ts;
-        var t = Math.min((ts - startTime) / DURATION, 1);
+        var elapsed = ts - startTime;
+        var t = Math.min(elapsed / DURATION, 1);
         var e = easeInOut(t);
         wm.style.left = (x + (tx - x) * e) + 'px';
         wm.style.top  = (y + (ty - y) * e) + 'px';
@@ -441,7 +454,10 @@ const VideoPlayerScreen = ({ navigation, route }: Props) => {
 
   // ── Single Persistent WebView (Never unmounts on rotation!) ─────────────────────
   return (
-    <SafeAreaView style={isLandscape ? styles.fullscreenContainer : styles.container} edges={isLandscape ? [] : ['top', 'bottom']}>
+    <SafeAreaView
+      style={isLandscape ? [styles.fullscreenContainer, { paddingTop: insets.top, paddingBottom: insets.bottom, paddingLeft: insets.left, paddingRight: insets.right }] : styles.container}
+      edges={isLandscape ? [] : ['top', 'bottom']}
+    >
       <StatusBar hidden={isLandscape} barStyle="dark-content" backgroundColor={COLORS.bg} />
 
       {/* Video Player Box */}
@@ -465,14 +481,14 @@ const VideoPlayerScreen = ({ navigation, route }: Props) => {
           webDebuggingEnabled={false}
         />
 
-        {/* Dedicated Fullscreen Toggle Button */}
+        {/* Dedicated Fullscreen Toggle Button — 42x42 Icon Only */}
         <TouchableOpacity
           style={styles.fullscreenBtn}
           onPress={toggleFullscreen}
           activeOpacity={0.8}
         >
           <Text style={styles.fullscreenBtnText}>
-            {isLandscape ? '⤓ Exit Fullscreen' : '⤢ Fullscreen'}
+            {isLandscape ? '⤓' : '⤢'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -532,18 +548,25 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 12,
     right: 12,
-    backgroundColor: 'rgba(15, 23, 42, 0.75)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: RADIUS.pill,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: 'rgba(15, 23, 42, 0.8)',
+    alignItems: 'center',
+    justifyContent: 'center',
     zIndex: 9999,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: 'rgba(255, 255, 255, 0.25)',
   },
   fullscreenBtnText: {
     color: '#FFFFFF',
-    fontSize: 12,
+    fontSize: 20,
     fontWeight: '700',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    includeFontPadding: false,
+    lineHeight: Platform.OS === 'android' ? 24 : 22,
+    marginTop: Platform.OS === 'android' ? -2 : 0,
   },
   centered: {
     flex: 1,

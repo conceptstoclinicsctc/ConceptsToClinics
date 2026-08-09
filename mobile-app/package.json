@@ -1,6 +1,6 @@
 {
   "name": "conceptstoclinics",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "index.js",
   "dependencies": {
     "@react-native-firebase/app": "^25.1.0",

@@ -11,7 +11,7 @@ import {
   useWindowDimensions,
   TouchableOpacity,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import { usePreventScreenCapture } from 'expo-screen-capture';
 import { RouteProp } from '@react-navigation/native';
@@ -151,6 +151,7 @@ const VideoPlayerScreen = ({ navigation, route }: Props) => {
   const { videoId, courseId, playlistId, videoTitle, videoDescription, resumeSeconds, videoDuration } = route.params;
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
+  const insets = useSafeAreaInsets();
 
   const { displayName, studentId } = useAuthStore();
 
@@ -453,7 +454,10 @@ const VideoPlayerScreen = ({ navigation, route }: Props) => {
 
   // ── Single Persistent WebView (Never unmounts on rotation!) ─────────────────────
   return (
-    <SafeAreaView style={isLandscape ? styles.fullscreenContainer : styles.container} edges={isLandscape ? [] : ['top', 'bottom']}>
+    <SafeAreaView
+      style={isLandscape ? [styles.fullscreenContainer, { paddingTop: insets.top, paddingBottom: insets.bottom, paddingLeft: insets.left, paddingRight: insets.right }] : styles.container}
+      edges={isLandscape ? [] : ['top', 'bottom']}
+    >
       <StatusBar hidden={isLandscape} barStyle="dark-content" backgroundColor={COLORS.bg} />
 
       {/* Video Player Box */}
@@ -477,14 +481,14 @@ const VideoPlayerScreen = ({ navigation, route }: Props) => {
           webDebuggingEnabled={false}
         />
 
-        {/* Dedicated Fullscreen Toggle Button */}
+        {/* Dedicated Fullscreen Toggle Button — 42x42 Icon Only */}
         <TouchableOpacity
           style={styles.fullscreenBtn}
           onPress={toggleFullscreen}
           activeOpacity={0.8}
         >
           <Text style={styles.fullscreenBtnText}>
-            {isLandscape ? '⤓ Exit Fullscreen' : '⤢ Fullscreen'}
+            {isLandscape ? '⤓' : '⤢'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -544,18 +548,25 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 12,
     right: 12,
-    backgroundColor: 'rgba(15, 23, 42, 0.75)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: RADIUS.pill,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: 'rgba(15, 23, 42, 0.8)',
+    alignItems: 'center',
+    justifyContent: 'center',
     zIndex: 9999,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: 'rgba(255, 255, 255, 0.25)',
   },
   fullscreenBtnText: {
     color: '#FFFFFF',
-    fontSize: 12,
+    fontSize: 20,
     fontWeight: '700',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    includeFontPadding: false,
+    lineHeight: Platform.OS === 'android' ? 24 : 22,
+    marginTop: Platform.OS === 'android' ? -2 : 0,
   },
   centered: {
     flex: 1,
