@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "Concepts To Clinics",
+    "slug": "mobile-app",
+    "version": "1.0.1",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "android": {
+      "package": "com.conceptstoclinics.app",
+      "versionCode": 2,
+      "googleServicesFile": "./google-services.json",
+      "icon": "./assets/icon.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon-fore.png",
+        "backgroundColor": "#ffffff"
+      },
+      "splash": {
+        "image": "./assets/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1b449d39-3aa4-413e-adf5-c239d4372c38"
+      }
+    }
+  }
+}

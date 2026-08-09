@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "360480192",
+    "project_id": "concepts-to-clinics-dev",
+    "storage_bucket": "concepts-to-clinics-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360480192:android:fb9754e5e11bfb09ccdc25",
+        "android_client_info": {
+          "package_name": "com.conceptstoclinics.playground"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBI8zRKwL8RD1koct8OkMqDYlfLfTCOi6w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

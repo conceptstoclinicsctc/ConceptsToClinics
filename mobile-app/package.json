@@ -1,0 +1,40 @@
+{
+  "name": "conceptstoclinics",
+  "version": "1.0.1",
+  "main": "index.js",
+  "dependencies": {
+    "@react-native-firebase/app": "^25.1.0",
+    "@react-native-firebase/auth": "^25.1.0",
+    "@react-navigation/native": "^6.1.18",
+    "@react-navigation/stack": "^6.4.1",
+    "axios": "^1.18.1",
+    "expo": "~57.0.8",
+    "expo-constants": "~57.0.9",
+    "expo-crypto": "^57.0.1",
+    "expo-screen-capture": "^57.0.1",
+    "expo-screen-orientation": "~57.0.1",
+    "expo-secure-store": "^57.0.1",
+    "expo-status-bar": "~57.0.1",
+    "react": "19.2.3",
+    "react-native": "0.86.0",
+    "react-native-device-info": "^15.0.2",
+    "react-native-gesture-handler": "^3.1.0",
+    "react-native-safe-area-context": "^5.8.0",
+    "react-native-screens": "^4.26.2",
+    "react-native-webview": "^13.17.0",
+    "typescript": "~6.0.3",
+    "zustand": "^4.5.7"
+  },
+  "publishConfig": {
+    "executableFiles": [
+      "./android/gradlew"
+    ]
+  },
+  "scripts": {
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web"
+  },
+  "private": true
+}
