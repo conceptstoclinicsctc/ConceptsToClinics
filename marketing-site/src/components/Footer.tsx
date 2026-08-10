@@ -1,38 +1,88 @@
-"use client";
+import { Stethoscope, Mail, MessageCircle, Instagram, Youtube } from 'lucide-react';
+import Link from 'next/link';
 
-export default function Footer() {
+const navLinks = [
+  { label: 'Home', href: '/' },
+  { label: 'Courses', href: '/courses' },
+  { label: 'Download & Login', href: '/download' },
+  { label: 'Contact Us', href: '/contact' },
+];
+
+const socialLinks = [
+  { label: 'WhatsApp', icon: MessageCircle, href: 'https://wa.me/923035078387' },
+  { label: 'Email', icon: Mail, href: 'mailto:hello@conceptstoclinics.com' },
+  { label: 'Instagram', icon: Instagram, href: 'https://www.instagram.com/conceptstoclinics?igsh=MndvZ21xaHhiYWli' },
+  { label: 'YouTube', icon: Youtube, href: 'https://www.youtube.com/@conceptstoclinics' },
+];
+
+export function Footer() {
   return (
-    <footer className="bg-[#F8F7F4] border-t border-slate-200 py-12 text-xs text-slate-600">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          
-          {/* Brand */}
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-black flex items-center justify-center text-white font-bold text-sm shadow-sm">
-              🎓
-            </div>
-            <div>
-              <span className="font-extrabold text-slate-900 text-sm">ConceptsToClinics</span>
-              <span className="text-slate-500 block text-[11px] font-medium">Private Online Medical & Biology Platform</span>
-            </div>
+    <footer className="bg-[#1A3B5E] text-white">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 py-16">
+        <div className="grid md:grid-cols-3 gap-10">
+          <div>
+            <Link href="/" className="flex items-center gap-2.5">
+              <img
+                src="/app-icon.png"
+                alt="Concepts to Clinics Icon"
+                className="w-9 h-9 object-contain rounded-xl"
+              />
+              <span className="font-display text-lg font-semibold">
+                Concepts to Clinics
+              </span>
+            </Link>
+            <p className="mt-4 text-sm text-white/70 max-w-xs leading-relaxed">
+              Master Concepts. Excel in Clinics.
+            </p>
+            <p className="mt-3 text-sm text-white/50 max-w-xs leading-relaxed">
+              Comprehensive, concept-based medical education designed for MBBS,
+              USMLE, FCPS, and NRE.
+            </p>
           </div>
 
-          {/* Links */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-slate-700 font-bold">
-            <a href="#about" className="hover:text-black transition-colors">About Tutor</a>
-            <a href="#demo" className="hover:text-black transition-colors">Demo Video</a>
-            <a href="#courses" className="hover:text-black transition-colors">Courses</a>
-            <a href="#how-it-works" className="hover:text-black transition-colors">How It Works</a>
-            <a href="#app-features" className="hover:text-black transition-colors">App Features</a>
-            <a href="#contact" className="hover:text-black transition-colors">Contact</a>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-white/50">
+              Quick Links
+            </p>
+            <ul className="mt-4 space-y-2">
+              {navLinks.map((l) => (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className="text-sm text-white/80 hover:text-[#2D939F] transition-colors"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          {/* Copyright */}
-          <div className="text-center md:text-right text-slate-500 text-[11px] font-medium">
-            <p>© {new Date().getFullYear()} ConceptsToClinics. All rights reserved.</p>
-            <p className="mt-0.5">Designed & Developed for Educator Aftab.</p>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-white/50">
+              Connect With Us
+            </p>
+            <ul className="mt-4 space-y-3">
+              {socialLinks.map((s) => (
+                <li key={s.label}>
+                  <a
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 text-sm text-white/80 hover:text-[#2D939F] transition-colors"
+                  >
+                    <s.icon className="w-4 h-4 text-[#2D939F]" />
+                    {s.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
+        </div>
 
+        <div className="mt-14 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/50">
+          <p>&copy; {new Date().getFullYear()} Concepts to Clinics. All rights reserved.</p>
+          <p>Built for medical learners everywhere.</p>
         </div>
       </div>
     </footer>

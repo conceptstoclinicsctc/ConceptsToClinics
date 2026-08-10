@@ -1,57 +1,72 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Inter, Fraunces } from 'next/font/google';
+import './globals.css';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { ScrollProgress } from '@/components/ScrollProgress';
+import { ScrollRevealer } from '@/components/ScrollRevealer';
 
 const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "ConceptsToClinics — Private Online Lectures by Aftab",
+  icons: {
+    icon: '/app-icon.png',
+    shortcut: '/app-icon.png',
+    apple: '/app-icon.png',
+  },
+  title: {
+    default: 'Concepts to Clinics — Master Concepts. Excel in Clinics.',
+    template: '%s | Concepts to Clinics',
+  },
   description:
-    "Master Biology & Medical Sciences with expert online lectures by Aftab. Private, high-definition lecture platform with flexible course access for medical aspirants.",
+    'Comprehensive, concept-based medical education designed for MBBS, USMLE, FCPS, and NRE. Integrating the First Aid framework with clinical correlation and examination-focused learning.',
   keywords: [
-    "Biology Tutor",
-    "Medical Science Lectures",
-    "Aftab Tutor",
-    "ConceptsToClinics",
-    "Online Biology Classes",
-    "Medical Entry Test Prep",
-    "Private Tutoring Pakistan",
+    'USMLE preparation',
+    'FCPS preparation',
+    'NRE preparation',
+    'MBBS lectures',
+    'First Aid USMLE',
+    'medical education',
+    'concept-based learning',
+    'medical courses online',
   ],
-  authors: [{ name: "Aftab", url: "https://conceptstoclinics.com" }],
   openGraph: {
-    title: "ConceptsToClinics — Private Online Lectures by Aftab",
+    title: 'Concepts to Clinics — Master Concepts. Excel in Clinics.',
     description:
-      "Expert-led online medical & biology lectures with high-definition video learning and mobile access.",
-    url: "https://conceptstoclinics.com",
-    siteName: "ConceptsToClinics",
-    locale: "en_US",
-    type: "website",
+      'Comprehensive, concept-based medical education designed for MBBS, USMLE, FCPS, and NRE.',
+    type: 'website',
+    siteName: 'Concepts to Clinics',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "ConceptsToClinics — Private Online Lectures by Aftab",
+    card: 'summary_large_image',
+    title: 'Concepts to Clinics — Master Concepts. Excel in Clinics.',
     description:
-      "Expert-led online medical & biology lectures with high-definition video learning and mobile access.",
-  },
-  robots: {
-    index: true,
-    follow: true,
+      'Comprehensive, concept-based medical education designed for MBBS, USMLE, FCPS, and NRE.',
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className={`${inter.variable} dark`}>
-      <body className="bg-gray-950 text-gray-100 antialiased selection:bg-indigo-500 selection:text-white">
-        {children}
+    <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
+      <body>
+        <ScrollProgress />
+        <ScrollRevealer />
+        <Header />
+        <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );
