@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { courses } from '@/data/courses';
+import { programs as courses } from '@/data/courses';
 
 export function Subjects() {
   return (
@@ -38,7 +38,7 @@ export function Subjects() {
                 {s.title}
               </h3>
               <p className="mt-1 text-xs font-medium uppercase tracking-wider text-[#5A6E82]">
-                {s.level}
+                {s.tag}
               </p>
               <p className="mt-3 text-[#5A6E82] leading-relaxed">{s.shortDesc}</p>
               <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[#2D939F] transition-colors group-hover:text-[#257B85]">
