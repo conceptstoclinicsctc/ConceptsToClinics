@@ -95,7 +95,7 @@ export default async function CourseDetailPage({
             </div>
             <Link
               href="/download"
-              className="inline-flex items-center gap-2.5 rounded-full bg-[#2D939F] px-8 py-4 text-base font-semibold text-white transition-all hover:bg-[#257B85] hover:shadow-xl hover:-translate-y-0.5"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-full bg-[#2D939F] px-8 py-4 text-base font-semibold text-white transition-all hover:bg-[#257B85] hover:shadow-xl hover:-translate-y-0.5"
             >
               Enroll Now ({program.fee})
               <ArrowRight className="w-5 h-5" />
@@ -334,7 +334,7 @@ export default async function CourseDetailPage({
           <div className="reveal flex flex-wrap items-center justify-between gap-6 pt-10 border-t border-[#D8E9F1]">
             <Link
               href="/courses"
-              className="inline-flex items-center gap-2 rounded-full border border-[#D8E9F1] bg-white px-7 py-3.5 text-base font-semibold text-[#1A3B5E] shadow-sm hover:border-[#1A3B5E] hover:bg-[#1A3B5E] hover:text-white transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-[#D8E9F1] bg-white px-7 py-3.5 text-base font-semibold text-[#1A3B5E] shadow-sm hover:border-[#1A3B5E] hover:bg-[#1A3B5E] hover:text-white transition-all"
             >
               <ArrowLeft className="w-5 h-5" />
               Back to All Courses
@@ -342,7 +342,7 @@ export default async function CourseDetailPage({
 
             <Link
               href="/download"
-              className="inline-flex items-center gap-2.5 rounded-full bg-[#2D939F] px-8 py-4 text-base font-semibold text-white transition-all hover:bg-[#257B85] hover:shadow-xl hover:-translate-y-0.5"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-full bg-[#2D939F] px-8 py-4 text-base font-semibold text-white transition-all hover:bg-[#257B85] hover:shadow-xl hover:-translate-y-0.5"
             >
               Enroll Now ({program.fee})
               <ArrowRight className="w-5 h-5" />

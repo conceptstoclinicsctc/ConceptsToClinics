@@ -120,10 +120,10 @@ export function CoursesPageClient() {
                     )}
                   </div>
 
-                  <div className="mt-8 flex flex-wrap items-center gap-4 pt-6 border-t border-[#D8E9F1]">
+                  <div className="mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4 pt-6 border-t border-[#D8E9F1]">
                     <Link
                       href={`/courses/${c.id}`}
-                      className="inline-flex items-center gap-2 rounded-full border border-[#2D939F] bg-white px-6 py-3 text-sm font-semibold text-[#2D939F] transition-all duration-300 hover:bg-[#2D939F] hover:text-white shadow-sm"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-[#2D939F] bg-white px-6 py-3 text-sm font-semibold text-[#2D939F] transition-all duration-300 hover:bg-[#2D939F] hover:text-white shadow-sm"
                     >
                       <BookOpen className="w-4 h-4" />
                       Read Full Details &amp; Syllabus
@@ -131,7 +131,7 @@ export function CoursesPageClient() {
 
                     <Link
                       href="/download"
-                      className="group inline-flex items-center gap-2 rounded-full bg-[#1A3B5E] px-6 py-3 text-sm font-medium text-white transition-all duration-300 hover:bg-[#254670]"
+                      className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 rounded-full bg-[#1A3B5E] px-6 py-3 text-sm font-medium text-white transition-all duration-300 hover:bg-[#254670]"
                     >
                       Enroll Now
                       <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
