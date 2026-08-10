@@ -133,3 +133,19 @@ export function generateSignedEmbedUrl(videoGuid: string, expirationSeconds: num
 
   return `https://player.mediadelivery.net/embed/${libraryId}/${videoGuid}?token=${token}&expires=${expires}&autoplay=true`;
 }
+
+/**
+ * Generates Bunny Stream TUS Resumable Upload Authentication Headers.
+ * Signature algorithm per Bunny Stream TUS Docs: SHA256_HEX(libraryId + apiKey + expire + videoGuid)
+ */
+export function generateTusAuth(videoGuid: string, expirationSeconds: number = 86400): {
+  libraryId: string;
+  signature: string;
+  expire: number;
+} {
+  const { libraryId, apiKey } = getEnvVars();
+  const expire = Math.floor(Date.now() / 1000) + expirationSeconds;
+  const hashable = `${libraryId}${apiKey}${expire}${videoGuid}`;
+  const signature = crypto.createHash("sha256").update(hashable).digest("hex");
+  return { libraryId, signature, expire };
+}

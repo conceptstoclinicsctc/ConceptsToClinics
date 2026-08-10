@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, type ReactNode } from 'react';
-import { initiateDirectUpload, uploadVideoDirectToBunny, completeDirectUpload, type Video } from '../api/courses';
+import { initiateDirectUpload, uploadVideoTusToBunny, uploadVideoDirectToBunny, completeDirectUpload, type Video } from '../api/courses';
 import toast from 'react-hot-toast';
 
 export interface UploadTask {
@@ -88,12 +88,27 @@ export const UploadProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
       onSuccess?.(newVid);
 
-      // Step 2: Upload binary file directly from browser to Bunny CDN
-      await uploadVideoDirectToBunny(initRes.uploadUrl, initRes.apiKey, file, (percent) => {
+      // Step 2: Upload binary file directly from browser to Bunny CDN using TUS resumable protocol
+      const onProgress = (percent: number) => {
         setTasks((prev) =>
           prev.map((t) => (t.id === taskId ? { ...t, progress: percent } : t))
         );
-      });
+      };
+
+      if (initRes.libraryId && initRes.bunnyVideoGuid && initRes.tusSignature && initRes.tusExpire) {
+        console.log(`[UploadContext] Using TUS Resumable Upload protocol for video: ${initRes.bunnyVideoGuid}`);
+        await uploadVideoTusToBunny(
+          file,
+          initRes.libraryId,
+          initRes.bunnyVideoGuid,
+          initRes.tusSignature,
+          initRes.tusExpire,
+          onProgress
+        );
+      } else {
+        console.log(`[UploadContext] Falling back to standard direct upload for video: ${initRes.bunnyVideoGuid}`);
+        await uploadVideoDirectToBunny(initRes.uploadUrl, initRes.apiKey, file, onProgress);
+      }
 
       // Step 3: Notify backend that upload completed so Firestore status flips from 'uploading' -> 'ready'
       try {

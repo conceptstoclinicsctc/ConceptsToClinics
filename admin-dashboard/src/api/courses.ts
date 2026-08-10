@@ -1,7 +1,86 @@
 import apiClient from './client';
 import axios from 'axios';
+import * as tus from 'tus-js-client';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+export interface InitiateUploadResult {
+  videoId: string;
+  bunnyVideoGuid: string;
+  uploadUrl: string;
+  apiKey: string;
+  libraryId?: string;
+  tusSignature?: string;
+  tusExpire?: number;
+}
+
+export const initiateDirectUpload = async (
+  courseId: string,
+  playlistId: string,
+  data: { title: string; description: string; order: number; isFreePreview: boolean }
+): Promise<InitiateUploadResult> => {
+  const res = await apiClient.post(
+    `/admin/courses/${courseId}/playlists/${playlistId}/videos/initiate-upload`,
+    data
+  );
+  return res.data;
+};
+
+export const uploadVideoTusToBunny = (
+  file: File,
+  libraryId: string,
+  bunnyVideoGuid: string,
+  tusSignature: string,
+  tusExpire: number,
+  onProgress?: (percent: number) => void
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const upload = new tus.Upload(file, {
+      endpoint: 'https://video.bunnycdn.com/tusupload',
+      retryDelays: [0, 3000, 5000, 10000, 20000],
+      chunkSize: 5 * 1024 * 1024, // 5MB chunks for smooth background uploads
+      headers: {
+        AuthorizationSignature: tusSignature,
+        AuthorizationExpire: String(tusExpire),
+        VideoId: bunnyVideoGuid,
+        LibraryId: String(libraryId),
+      },
+      onError: (error) => {
+        console.error('[TUS Upload Error]', error);
+        reject(error);
+      },
+      onProgress: (bytesUploaded, bytesTotal) => {
+        if (bytesTotal > 0) {
+          const percent = Math.round((bytesUploaded / bytesTotal) * 100);
+          onProgress?.(percent);
+        }
+      },
+      onSuccess: () => {
+        resolve();
+      },
+    });
+
+    upload.start();
+  });
+};
+
+export const uploadVideoDirectToBunny = async (
+  uploadUrl: string,
+  apiKey: string,
+  file: File,
+  onProgress?: (percent: number) => void
+): Promise<void> => {
+  await axios.put(uploadUrl, file, {
+    headers: {
+      AccessKey: apiKey,
+      'Content-Type': 'application/octet-stream',
+    },
+    onUploadProgress: (progressEvent) => {
+      if (progressEvent.total) {
+        const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        onProgress?.(percent);
+      }
+    },
+  });
+};
 
 export interface Course {
   id: string;
@@ -118,38 +197,6 @@ export const attachExistingPlaylist = async (
 export const getPlaylistVideos = async (courseId: string, playlistId: string): Promise<Video[]> => {
   const res = await apiClient.get(`/admin/courses/${courseId}/playlists/${playlistId}/videos`);
   return res.data.videos;
-};
-
-export const initiateDirectUpload = async (
-  courseId: string,
-  playlistId: string,
-  data: { title: string; description: string; order: number; isFreePreview: boolean }
-): Promise<{ videoId: string; bunnyVideoGuid: string; uploadUrl: string; apiKey: string }> => {
-  const res = await apiClient.post(
-    `/admin/courses/${courseId}/playlists/${playlistId}/videos/initiate-upload`,
-    data
-  );
-  return res.data;
-};
-
-export const uploadVideoDirectToBunny = async (
-  uploadUrl: string,
-  apiKey: string,
-  file: File,
-  onProgress?: (percent: number) => void
-): Promise<void> => {
-  await axios.put(uploadUrl, file, {
-    headers: {
-      AccessKey: apiKey,
-      'Content-Type': 'application/octet-stream',
-    },
-    onUploadProgress: (progressEvent) => {
-      if (progressEvent.total) {
-        const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        onProgress?.(percent);
-      }
-    },
-  });
 };
 
 export const completeDirectUpload = async (

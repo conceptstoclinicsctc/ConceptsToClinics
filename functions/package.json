@@ -2,7 +2,7 @@
   "name": "functions",
   "scripts": {
     "lint": "eslint --ext .js,.ts .",
-    "build": "tsc",
+    "build": "node node_modules/typescript/bin/tsc",
     "build:watch": "tsc --watch",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
@@ -32,7 +32,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.40.0",
     "eslint-plugin-import": "^2.27.5",
-    "typescript": "^5.4.5"
+    "typescript": "^5.9.3"
   },
   "private": true
 }

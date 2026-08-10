@@ -4,7 +4,7 @@ import { db, admin } from "../../config/firebase";
 import { verifyToken } from "../../middleware/verifyToken";
 import { verifyAdmin } from "../../middleware/verifyAdmin";
 import { AuthenticatedRequest, CourseDoc, PlaylistDoc, VideoDoc, ErrorCodes } from "../../types";
-import { createBunnyVideo, uploadBunnyVideo, deleteBunnyVideo, getBunnyVideoMetadata } from "../../utils/bunnyStream";
+import { createBunnyVideo, uploadBunnyVideo, deleteBunnyVideo, getBunnyVideoMetadata, generateTusAuth } from "../../utils/bunnyStream";
 
 const router = Router();
 
@@ -713,10 +713,15 @@ router.post(
 
       console.log(`[Direct Upload Initiate] Step 2: Created Firestore video doc (${videoId!}) with status='uploading'. Returning direct upload authorization.`);
 
+      const tusAuth = generateTusAuth(bunnyVideoGuid, 86400);
+
       res.status(201).json({
         videoId: videoId!,
         uploadUrl: `https://video.bunnycdn.com/library/${libraryId}/videos/${bunnyVideoGuid}`,
         apiKey,
+        libraryId: tusAuth.libraryId,
+        tusSignature: tusAuth.signature,
+        tusExpire: tusAuth.expire,
         ...videoData,
       });
     } catch (error) {
