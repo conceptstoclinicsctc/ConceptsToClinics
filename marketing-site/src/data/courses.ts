@@ -249,16 +249,8 @@ export const methodology = [
     title: 'Comprehensive Recorded Lectures',
     desc: 'Systematically structured lectures covering the curriculum in a logical sequence, providing students with a complete and organized learning pathway.',
   },
-  {
-    icon: Brain,
-    title: 'Concepts From Basics to Advanced',
-    desc: 'Every topic begins with fundamental principles and progresses toward more advanced concepts, ensuring genuine understanding rather than dependence on rote memorization.',
-  },
-  {
-    icon: Microscope,
-    title: 'Illustration & Visual-Based Learning',
-    desc: 'Complex medical concepts are explained using illustrations, diagrams, flowcharts, pathways, and tables to improve comprehension and long-term retention.',
-  },
+
+
   {
     icon: ClipboardList,
     title: 'First Aid–Integrated Learning',
@@ -268,6 +260,29 @@ export const methodology = [
     icon: Stethoscope,
     title: 'Clinical Correlation',
     desc: 'Basic medical sciences are continuously connected with clinical presentations, pathophysiology, investigations, diagnosis, and management, establishing a clear connection between concepts and clinical practice.',
+  },
+  {
+    icon: HeartPulse,
+    title: 'Integrated Medical Learning',
+    desc: 'Related concepts are connected across disciplines rather than being treated as isolated areas of knowledge, creating a more cohesive understanding of medicine.',
+  },
+];
+
+export const whyChooseUs = [
+  {
+    icon: ClipboardList,
+    title: 'Complete First Aid in Just 150 Hours',
+    desc: 'A complete, system-wise First Aid for the USMLE Step 1 lecture series delivered in just 150 hours, designed to serve as a primary learning resource and minimize dependence on multiple video resources.',
+  },
+  {
+    icon: Brain,
+    title: 'Concepts From Basics to Advanced',
+    desc: 'Every topic begins with fundamental principles and progresses toward more advanced concepts, ensuring genuine understanding rather than dependence on rote memorization.',
+  },
+  {
+    icon: Microscope,
+    title: 'Illustration & Visual-Based Learning',
+    desc: 'Complex medical concepts are explained using illustrations, diagrams, flowcharts, pathways, and tables to improve comprehension and long-term retention.',
   },
   {
     icon: Activity,
@@ -291,45 +306,12 @@ export const methodology = [
   },
   {
     icon: HeartPulse,
-    title: 'Integrated Medical Learning',
-    desc: 'Related concepts are connected across disciplines rather than being treated as isolated areas of knowledge, creating a more cohesive understanding of medicine.',
-  },
-];
-
-export const whyChooseUs = [
-  {
-    icon: ClipboardList,
-    title: 'Complete First Aid in Just 150 Hours',
-    desc: 'A complete, system-wise First Aid for the USMLE Step 1 lecture series delivered in just 150 hours, designed to serve as a primary learning resource and minimize dependence on multiple video resources.',
-  },
-  {
-    icon: GraduationCap,
-    title: 'One Curriculum. Multiple Examination Pathways.',
-    desc: 'A strong foundation in core medical sciences structured to support preparation for MBBS, USMLE, FCPS, and NRE, with course-specific emphasis according to the requirements of each examination.',
-  },
-  {
-    icon: Stethoscope,
-    title: 'From Fundamentals to Clinical Application',
-    desc: 'The curriculum progresses from basic concepts to clinical application, helping students understand the underlying principles behind disease mechanisms, clinical presentations, investigations, and management.',
-  },
-  {
-    icon: Brain,
-    title: 'High-Yield Without Losing the Concepts',
-    desc: 'Essential concepts are explained thoroughly while maintaining a clear focus on high-yield and examination-relevant information, allowing students to prioritize their preparation effectively.',
+    title: 'Personalized Mentorship Where Included',
+    desc: 'Selected programs include individualized academic mentorship, providing study planning, progress monitoring, performance assessment, and examination guidance.',
   },
   {
     icon: Activity,
     title: 'A Structured Learning Pathway',
     desc: 'Each program follows a defined curriculum and duration, providing students with a clear academic pathway rather than an unstructured collection of learning resources.',
-  },
-  {
-    icon: HeartPulse,
-    title: 'Personalized Mentorship Where Included',
-    desc: 'Selected programs include individualized academic mentorship, providing study planning, progress monitoring, performance assessment, and examination guidance.',
-  },
-  {
-    icon: Dna,
-    title: 'A Strong Foundation for Multiple Examinations',
-    desc: 'A comprehensive understanding of core medical concepts can support students across different stages of medical education and multiple examination pathways.',
   },
 ];

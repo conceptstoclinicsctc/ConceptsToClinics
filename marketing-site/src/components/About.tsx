@@ -11,23 +11,15 @@ export function About() {
           </h2>
         </div>
 
-        <div className="reveal mt-10 space-y-6 text-lg text-[#5A6E82] leading-relaxed">
+        <div className="reveal mt-10 space-y-6 text-lg text-[#5A6E82] leading-relaxed text-left sm:text-center">
           <p>
-            Concepts to Clinics is a medical education platform dedicated to
-            providing structured, concept-based learning that connects
-            foundational medical sciences with clinical practice.
+            Concepts to Clinics is a medical education platform dedicated to structured, concept-based learning designed for USMLE, MBBS, FCPS and NRE, that connects medical concepts with clinical scenarios.
           </p>
           <p>
-            Our curriculum is built around the First Aid framework, with a
-            strong emphasis on conceptual understanding, clinical correlation,
-            and high-yield examination preparation.
+            Our curriculum is built around our First Aid lecture series, with a strong emphasis on conceptual understanding, clinical correlation, and high-yield examination preparation.
           </p>
           <p>
-            Designed for MBBS Professional Examinations, USMLE, FCPS, and NRE,
-            our courses provide a systematic learning pathway that helps
-            students understand complex medical concepts, apply their knowledge
-            clinically, and prepare effectively for their respective
-            examinations.
+            Beyond lectures, our structured mentorship guides students throughout their preparation—from the first day of their study plan to exam day. We help you understand what to study, how to study, which resources to use, how to structure your preparation, track your progress, identify and overcome weak areas, improve your performance when scores plateau, and adjust your strategy when your results fall short—helping you stay on course until you are exam-ready.
           </p>
         </div>
       </div>

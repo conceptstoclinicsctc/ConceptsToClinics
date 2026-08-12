@@ -5,9 +5,7 @@ export function WhyChooseUs() {
     <section id="why" className="py-24 sm:py-32 bg-[#F1F5F9]">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <div className="max-w-2xl">
-          <p className="reveal text-sm font-semibold uppercase tracking-widest text-[#2D939F]">
-            Why Choose Us
-          </p>
+
           <h2 className="reveal mt-3 font-display text-4xl sm:text-5xl font-semibold tracking-tight text-[#1A3B5E]">
             Why Choose Concepts to Clinics?
           </h2>

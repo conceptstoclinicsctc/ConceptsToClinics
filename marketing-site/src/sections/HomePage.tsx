@@ -19,7 +19,7 @@ export function HomePageClient() {
       <WhyChooseUs />
       <Founder />
       <DemoLecture />
-      <Methodology />
+      {/* <Methodology /> */}
       <Programs />
       <CtaBanner />
     </>
