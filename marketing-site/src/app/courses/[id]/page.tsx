@@ -94,7 +94,7 @@ export default async function CourseDetailPage({
               </p>
             </div>
             <Link
-              href="/download"
+              href="/contact"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-full bg-[#2D939F] px-8 py-4 text-base font-semibold text-white transition-all hover:bg-[#257B85] hover:shadow-xl hover:-translate-y-0.5"
             >
               Enroll Now ({program.fee})
@@ -341,7 +341,7 @@ export default async function CourseDetailPage({
             </Link>
 
             <Link
-              href="/download"
+              href="/contact"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-full bg-[#2D939F] px-8 py-4 text-base font-semibold text-white transition-all hover:bg-[#257B85] hover:shadow-xl hover:-translate-y-0.5"
             >
               Enroll Now ({program.fee})

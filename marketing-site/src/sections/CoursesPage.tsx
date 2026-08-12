@@ -130,7 +130,7 @@ export function CoursesPageClient() {
                     </Link>
 
                     <Link
-                      href="/download"
+                      href="/contact"
                       className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 rounded-full bg-[#1A3B5E] px-6 py-3 text-sm font-medium text-white transition-all duration-300 hover:bg-[#254670]"
                     >
                       Enroll Now
