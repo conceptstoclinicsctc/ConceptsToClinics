@@ -13,16 +13,21 @@ export function Hero() {
         <div className="max-w-3xl">
 
           {/* Tutor Profile Pill Badge */}
-          <div className="reveal inline-flex items-center gap-3 bg-white/90 backdrop-blur border border-[#D8E9F1] p-1.5 pr-4 rounded-full shadow-sm mb-6">
+          <a
+            href="https://www.linkedin.com/in/aftab-ali-b943bb182"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="reveal inline-flex items-center gap-3 bg-white/90 backdrop-blur border border-[#D8E9F1] hover:border-[#2D939F] p-1.5 pr-4 rounded-full shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer mb-6 group"
+          >
             <img
               src="/dr-aftab.jpg"
               alt="Dr. Aftab Ali, MBBS"
-              className="w-9 h-9 rounded-full object-cover object-top border-2 border-[#2D939F]"
+              className="w-9 h-9 rounded-full object-cover object-top border-2 border-[#2D939F] group-hover:scale-105 transition-transform"
             />
-            <span className="text-xs font-semibold text-[#1A3B5E]">
+            <span className="text-xs font-semibold text-[#1A3B5E] group-hover:text-[#2D939F] transition-colors">
               Founded by <strong className="text-[#2D939F]">Dr. Aftab Ali, MBBS</strong> (Step 2 CK: 260+)
             </span>
-          </div>
+          </a>
 
           <h1 className="reveal font-display text-[2.6rem] leading-[1.05] sm:text-6xl lg:text-[4.2rem] font-semibold tracking-tight text-[#1A3B5E]">
             Master Concepts.{' '}
