@@ -734,6 +734,74 @@ router.post(
   }
 );
 
+// ─── POST /admin/courses/:id/playlists/:playlistId/videos/:videoId/complete-upload ───
+
+/**
+ * Called by admin dashboard after binary / TUS upload completes.
+ * Fetches video metadata from Bunny Stream and updates Firestore status to 'processing' or 'ready'.
+ */
+router.post(
+  "/:id/playlists/:playlistId/videos/:videoId/complete-upload",
+  async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    const { id: courseId, playlistId, videoId } = req.params;
+
+    try {
+      const videoRef = db
+        .collection("courses")
+        .doc(courseId)
+        .collection("playlists")
+        .doc(playlistId)
+        .collection("videos")
+        .doc(videoId);
+
+      const videoSnap = await videoRef.get();
+      if (!videoSnap.exists) {
+        res.status(404).json({ code: ErrorCodes.NOT_FOUND, message: "Video not found." });
+        return;
+      }
+
+      const videoData = videoSnap.data() as VideoDoc;
+      const bunnyGuid = videoData.bunnyVideoGuid;
+
+      let duration = 0;
+      let status: "processing" | "ready" = "processing";
+
+      if (bunnyGuid) {
+        try {
+          const meta = await getBunnyVideoMetadata(bunnyGuid);
+          if (meta) {
+            duration = meta.length || 0;
+            if (meta.status === 4 || (meta.length > 0 && meta.status !== 5)) {
+              status = "ready";
+            }
+          }
+        } catch (metaErr) {
+          console.warn(`[Complete Upload] Warning fetching metadata for ${bunnyGuid}:`, metaErr);
+        }
+      }
+
+      const updateData: Record<string, unknown> = {
+        status,
+        uploadedAt: new Date(),
+      };
+      if (duration > 0) {
+        updateData.duration = duration;
+      }
+
+      await videoRef.update(updateData);
+      console.log(`[Complete Upload] Video ${videoId} updated to status='${status}' (duration: ${duration}s).`);
+
+      res.status(200).json({ message: "Upload completed successfully.", status, duration });
+    } catch (error) {
+      console.error(`[admin/courses POST /${courseId}/playlists/${playlistId}/videos/${videoId}/complete-upload] Error:`, error);
+      res.status(500).json({
+        code: ErrorCodes.INTERNAL_ERROR,
+        message: "Failed to mark video upload complete.",
+      });
+    }
+  }
+);
+
 // ─── POST /admin/courses/:id/playlists/:playlistId/videos/upload ──────────────
 
 /**

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, type ReactNode } from 'react';
-import { initiateDirectUpload, uploadVideoTusToBunny, uploadVideoDirectToBunny, completeDirectUpload, type Video } from '../api/courses';
+import { initiateDirectUpload, uploadVideoTusToBunny, uploadVideoDirectToBunny, completeDirectUpload, deleteVideo, type Video } from '../api/courses';
 import toast from 'react-hot-toast';
 
 export interface UploadTask {
@@ -62,6 +62,7 @@ export const UploadProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     setTasks((prev) => [...prev, newTask]);
     setIsMinimized(false);
 
+    let createdVideoId: string | null = null;
     try {
       // Step 1: Initiate upload slot (~1KB lightweight API call)
       const initRes = await initiateDirectUpload(courseId, playlistId, {
@@ -70,6 +71,7 @@ export const UploadProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         order,
         isFreePreview,
       });
+      createdVideoId = initRes.videoId;
 
       setTasks((prev) =>
         prev.map((t) => (t.id === taskId ? { ...t, videoId: initRes.videoId } : t))
@@ -97,14 +99,24 @@ export const UploadProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
       if (initRes.libraryId && initRes.bunnyVideoGuid && initRes.tusSignature && initRes.tusExpire) {
         console.log(`[UploadContext] Using TUS Resumable Upload protocol for video: ${initRes.bunnyVideoGuid}`);
-        await uploadVideoTusToBunny(
-          file,
-          initRes.libraryId,
-          initRes.bunnyVideoGuid,
-          initRes.tusSignature,
-          initRes.tusExpire,
-          onProgress
-        );
+        try {
+          await uploadVideoTusToBunny(
+            file,
+            initRes.libraryId,
+            initRes.bunnyVideoGuid,
+            initRes.tusSignature,
+            initRes.tusExpire,
+            onProgress
+          );
+        } catch (tusError: any) {
+          console.warn(`[UploadContext] TUS upload failed/interrupted for ${initRes.bunnyVideoGuid}, falling back to direct upload:`, tusError);
+          try {
+            if (window.localStorage) {
+              window.localStorage.removeItem(`tus::bunny-tus-${initRes.libraryId}-${initRes.bunnyVideoGuid}::${initRes.tusExpire}`);
+            }
+          } catch {}
+          await uploadVideoDirectToBunny(initRes.uploadUrl, initRes.apiKey, file, onProgress);
+        }
       } else {
         console.log(`[UploadContext] Falling back to standard direct upload for video: ${initRes.bunnyVideoGuid}`);
         await uploadVideoDirectToBunny(initRes.uploadUrl, initRes.apiKey, file, onProgress);
@@ -120,14 +132,24 @@ export const UploadProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       setTasks((prev) =>
         prev.map((t) => (t.id === taskId ? { ...t, status: 'completed', progress: 100 } : t))
       );
-      toast.success(`" ${title} " uploaded directly to Bunny Stream!`);
+      toast.success(`"${title}" uploaded directly to Bunny Stream!`);
     } catch (err: any) {
       console.error(`Upload error for task ${taskId}:`, err);
       const msg = err.response?.data?.message || err.message || 'Upload failed.';
       setTasks((prev) =>
         prev.map((t) => (t.id === taskId ? { ...t, status: 'error', errorMessage: msg } : t))
       );
-      toast.error(`Failed to upload " ${title} ": ${msg}`);
+
+      // Clean up orphaned Firestore placeholder video doc if upload failed
+      if (createdVideoId) {
+        try {
+          await deleteVideo(courseId, playlistId, createdVideoId);
+        } catch (cleanupErr) {
+          console.warn(`[UploadContext] Failed to clean up video doc ${createdVideoId}:`, cleanupErr);
+        }
+      }
+
+      toast.error(`Failed to upload "${title}": ${msg}`);
     }
   };
 
