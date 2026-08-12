@@ -35,13 +35,18 @@ export const uploadVideoTusToBunny = (
   return new Promise((resolve, reject) => {
     const upload = new tus.Upload(file, {
       endpoint: 'https://video.bunnycdn.com/tusupload',
-      retryDelays: [0, 3000, 5000, 10000, 20000],
+      fingerprint: () => Promise.resolve(`bunny-tus-${libraryId}-${bunnyVideoGuid}`),
+      retryDelays: [0, 1000, 3000, 5000, 10000, 20000],
       chunkSize: 5 * 1024 * 1024, // 5MB chunks for smooth background uploads
       headers: {
         AuthorizationSignature: tusSignature,
         AuthorizationExpire: String(tusExpire),
         VideoId: bunnyVideoGuid,
         LibraryId: String(libraryId),
+      },
+      onShouldRetry: (error) => {
+        console.warn('[TUS Upload] Network or background disconnect detected, retrying chunk...', error);
+        return true;
       },
       onError: (error) => {
         console.error('[TUS Upload Error]', error);
@@ -54,11 +59,24 @@ export const uploadVideoTusToBunny = (
         }
       },
       onSuccess: () => {
+        console.log(`[TUS Upload] Successfully completed upload for video ${bunnyVideoGuid}`);
         resolve();
       },
     });
 
-    upload.start();
+    upload
+      .findPreviousUploads()
+      .then((previousUploads) => {
+        if (previousUploads.length > 0) {
+          console.log(`[TUS Upload] Found previous interrupted session for ${bunnyVideoGuid}, resuming from previous offset...`);
+          upload.resumeFromPreviousUpload(previousUploads[0]);
+        }
+        upload.start();
+      })
+      .catch((err) => {
+        console.warn(`[TUS Upload] findPreviousUploads failed/empty, starting fresh upload session:`, err);
+        upload.start();
+      });
   });
 };
 
