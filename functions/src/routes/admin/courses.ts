@@ -1118,7 +1118,6 @@ router.delete(
       const courseRef = db.collection("courses").doc(courseId);
       const playlistRef = courseRef.collection("playlists").doc(playlistId);
       const videoRef = playlistRef.collection("videos").doc(videoId);
-
       const videoSnap = await videoRef.get();
       if (!videoSnap.exists) {
         res.status(404).json({ code: ErrorCodes.NOT_FOUND, message: "Video not found." });
@@ -1128,6 +1127,33 @@ router.delete(
       const videoData = videoSnap.data() as VideoDoc;
       const bunnyGuid = videoData.bunnyVideoGuid;
 
+      // ── Check if any OTHER video document still references this bunnyVideoGuid ──
+      if (bunnyGuid && bunnyGuid.trim()) {
+        try {
+          const otherReferencesSnap = await db
+            .collectionGroup("videos")
+            .where("bunnyVideoGuid", "==", bunnyGuid)
+            .get();
+
+          const otherDocs = otherReferencesSnap.docs.filter((doc) => doc.ref.path !== videoRef.path);
+          if (otherDocs.length === 0) {
+            console.log(`[Delete Video] No other references found for ${bunnyGuid} — deleting from Bunny CDN...`);
+            await deleteBunnyVideo(bunnyGuid);
+          } else {
+            console.log(`[Delete Video] ${otherDocs.length} other course(s) still reference ${bunnyGuid} — Bunny CDN file preserved.`);
+          }
+        } catch (bunnyErr) {
+          console.error(`[Delete Video] Warning: Bunny deletion check or API call encountered an error for ${bunnyGuid}:`, bunnyErr);
+          // Try deleting directly from Bunny as fallback if collectionGroup query fails
+          try {
+            await deleteBunnyVideo(bunnyGuid);
+          } catch (fallbackErr) {
+            console.error(`[Delete Video] Fallback Bunny deletion also failed for ${bunnyGuid}:`, fallbackErr);
+          }
+        }
+      }
+
+      // ── Delete Firestore document and decrement course/playlist video counters ──
       await db.runTransaction(async (transaction) => {
         transaction.delete(videoRef);
         transaction.update(playlistRef, {
@@ -1138,24 +1164,7 @@ router.delete(
         });
       });
 
-      // ── Check if any OTHER video document still references this bunnyVideoGuid ──
-      if (bunnyGuid) {
-        const otherReferencesSnap = await db
-          .collectionGroup("videos")
-          .where("bunnyVideoGuid", "==", bunnyGuid)
-          .limit(1)
-          .get();
-
-        if (otherReferencesSnap.empty) {
-          deleteBunnyVideo(bunnyGuid).catch((err) =>
-            console.error(`[Delete Video] Failed to delete Bunny video ${bunnyGuid}:`, err)
-          );
-          console.log(`[Delete Video] No other references — deleted from Bunny: ${bunnyGuid}`);
-        } else {
-          console.log(`[Delete Video] Other course(s) still reference ${bunnyGuid} — Bunny file preserved.`);
-        }
-      }
-
+      console.log(`[Delete Video] Successfully deleted video doc ${videoId} from Firestore.`);
       res.status(200).json({ message: "Video deleted successfully." });
     } catch (error) {
       console.error(`[admin/courses DELETE /${courseId}/playlists/${playlistId}/videos/${videoId}] Error:`, error);

@@ -79,6 +79,11 @@ export async function uploadBunnyVideo(videoGuid: string, fileBuffer: Buffer): P
 export async function deleteBunnyVideo(videoGuid: string): Promise<void> {
   const { libraryId, apiKey } = getEnvVars();
 
+  if (!videoGuid || !videoGuid.trim()) {
+    console.warn("[Bunny Stream] deleteBunnyVideo skipped: empty videoGuid provided.");
+    return;
+  }
+
   const response = await fetch(`https://video.bunnycdn.com/library/${libraryId}/videos/${videoGuid}`, {
     method: "DELETE",
     headers: {
@@ -86,10 +91,18 @@ export async function deleteBunnyVideo(videoGuid: string): Promise<void> {
     },
   });
 
-  if (!response.ok && response.status !== 404) {
-    const errText = await response.text();
-    console.error(`Failed to delete Bunny video ${videoGuid} (${response.status}): ${errText}`);
+  if (response.status === 404) {
+    console.log(`[Bunny Stream] Video ${videoGuid} was not found on Bunny (404) — treating as deleted.`);
+    return;
   }
+
+  if (!response.ok) {
+    const errText = await response.text();
+    console.error(`[Bunny Stream] Failed to delete video ${videoGuid} (${response.status}): ${errText}`);
+    throw new Error(`Bunny API delete error (${response.status}): ${errText}`);
+  }
+
+  console.log(`[Bunny Stream] Successfully deleted video ${videoGuid} from library ${libraryId}`);
 }
 
 /**
