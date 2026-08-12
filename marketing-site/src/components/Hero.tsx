@@ -52,9 +52,10 @@ export function Hero() {
           </h1>
 
           <p className="reveal mt-6 max-w-2xl text-lg leading-relaxed text-[#5A6E82]">
-            A comprehensive, concept-based medical education platform for USMLE, FCPS, MBBS, and NRE.
-            Learn through our First Aid–based lecture series, connect concepts to clinical scenarios,
-            and receive expert Mentorship to make your preparation simpler, more structured, and exam-focused.
+            A comprehensive, concept-based medical education platform for USMLE,
+            FCPS, MBBS, and NRE. Learn through our First Aid–based lecture series,
+            connect concepts to clinical scenarios, and receive expert Mentorship to make
+            your preparation simpler, more structured, and exam-focused.
           </p>
 
           <div className="reveal mt-9 flex flex-col sm:flex-row gap-3">
@@ -76,9 +77,9 @@ export function Hero() {
 
         <div className="reveal mt-16 grid grid-cols-2 sm:grid-cols-4 gap-px overflow-hidden rounded-2xl border border-[#D8E9F1] bg-[#D8E9F1]">
           {[
-            { v: '150', l: 'Hours of First Aid' },
+            { v: '150+', l: 'Hours of First Aid Lectures' },
+            { v: '60+', l: 'Students Enrolled' },
             { v: '6', l: 'Programs' },
-            { v: '4', l: 'Exam Pathways' },
             { v: '1st', l: 'Attempt Success' },
           ].map((s) => (
             <div key={s.l} className="bg-white p-6 text-center">
