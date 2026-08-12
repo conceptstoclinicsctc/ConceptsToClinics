@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowRight, CheckCircle2, Mail, MapPin, MessageCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Mail, MapPin, MessageCircle, Instagram, Youtube } from 'lucide-react';
 
 const programOptions = [
   'USMLE Step 1',
@@ -89,6 +89,24 @@ export function ContactForm() {
                   <p className="font-medium text-[#1A3B5E]">Online · Worldwide</p>
                 </div>
               </div>
+              <a href="https://www.instagram.com/conceptstoclinics?igsh=MndvZ21xaHhiYWli" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group">
+                <span className="grid place-items-center w-11 h-11 rounded-xl bg-[#E6F2F8] text-[#2D939F] transition-colors group-hover:bg-[#2D939F] group-hover:text-white">
+                  <Instagram className="w-5 h-5" />
+                </span>
+                <div>
+                  <p className="text-xs text-[#5A6E82]">Instagram</p>
+                  <p className="font-medium text-[#1A3B5E]">@conceptstoclinics</p>
+                </div>
+              </a>
+              <a href="https://www.youtube.com/@conceptstoclinics" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group">
+                <span className="grid place-items-center w-11 h-11 rounded-xl bg-[#E6F2F8] text-[#2D939F] transition-colors group-hover:bg-[#2D939F] group-hover:text-white">
+                  <Youtube className="w-5 h-5" />
+                </span>
+                <div>
+                  <p className="text-xs text-[#5A6E82]">YouTube</p>
+                  <p className="font-medium text-[#1A3B5E]">@conceptstoclinics</p>
+                </div>
+              </a>
             </div>
           </div>
 
