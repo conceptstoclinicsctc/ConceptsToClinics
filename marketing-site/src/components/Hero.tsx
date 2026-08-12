@@ -52,9 +52,9 @@ export function Hero() {
           </h1>
 
           <p className="reveal mt-6 max-w-2xl text-lg leading-relaxed text-[#5A6E82]">
-            Comprehensive, concept-based medical education designed for MBBS,
-            USMLE, FCPS, and NRE, integrating the First Aid framework with
-            clinical correlation and examination-focused learning.
+            A comprehensive, concept-based medical education platform for USMLE, FCPS, MBBS, and NRE.
+            Learn through our First Aid–based lecture series, connect concepts to clinical scenarios,
+            and receive expert Mentorship to make your preparation simpler, more structured, and exam-focused.
           </p>
 
           <div className="reveal mt-9 flex flex-col sm:flex-row gap-3">
