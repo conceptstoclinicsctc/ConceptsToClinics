@@ -135,7 +135,26 @@ export const UploadProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       toast.success(`"${title}" uploaded directly to Bunny Stream!`);
     } catch (err: any) {
       console.error(`Upload error for task ${taskId}:`, err);
-      const msg = err.response?.data?.message || err.message || 'Upload failed.';
+      const rawMsg = err.response?.data?.Message || err.response?.data?.message || err.message || '';
+      const msg = typeof rawMsg === 'string' ? rawMsg : 'Upload failed.';
+
+      // Check if Bunny CDN reported that the video stream is already complete
+      if (msg.toLowerCase().includes('already been uploaded')) {
+        console.log(`[UploadContext] Video "${title}" was already uploaded to Bunny CDN. Completing registration...`);
+        if (createdVideoId) {
+          try {
+            await completeDirectUpload(courseId, playlistId, createdVideoId);
+          } catch (completeErr) {
+            console.warn(`[UploadContext] Warning: completeDirectUpload notice failed:`, completeErr);
+          }
+        }
+        setTasks((prev) =>
+          prev.map((t) => (t.id === taskId ? { ...t, status: 'completed', progress: 100 } : t))
+        );
+        toast.success(`"${title}" uploaded directly to Bunny Stream!`);
+        return;
+      }
+
       setTasks((prev) =>
         prev.map((t) => (t.id === taskId ? { ...t, status: 'error', errorMessage: msg } : t))
       );

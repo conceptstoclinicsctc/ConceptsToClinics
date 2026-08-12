@@ -48,7 +48,13 @@ export const uploadVideoTusToBunny = (
         console.warn('[TUS Upload] Network or background disconnect detected, retrying chunk...', error);
         return true;
       },
-      onError: (error) => {
+      onError: (error: any) => {
+        const msg = error?.originalResponse?.getBody?.() || error?.message || '';
+        if (typeof msg === 'string' && msg.toLowerCase().includes('already been uploaded')) {
+          console.log(`[TUS Upload] Video ${bunnyVideoGuid} already uploaded to Bunny Stream, marking as success.`);
+          resolve();
+          return;
+        }
         console.error('[TUS Upload Error]', error);
         reject(error);
       },
@@ -86,18 +92,28 @@ export const uploadVideoDirectToBunny = async (
   file: File,
   onProgress?: (percent: number) => void
 ): Promise<void> => {
-  await axios.put(uploadUrl, file, {
-    headers: {
-      AccessKey: apiKey,
-      'Content-Type': 'application/octet-stream',
-    },
-    onUploadProgress: (progressEvent) => {
-      if (progressEvent.total) {
-        const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        onProgress?.(percent);
-      }
-    },
-  });
+  try {
+    await axios.put(uploadUrl, file, {
+      headers: {
+        AccessKey: apiKey,
+        'Content-Type': 'application/octet-stream',
+      },
+      onUploadProgress: (progressEvent) => {
+        if (progressEvent.total) {
+          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          onProgress?.(percent);
+        }
+      },
+    });
+  } catch (err: any) {
+    const errMsg = err?.response?.data?.Message || err?.response?.data?.message || err?.message || '';
+    if (typeof errMsg === 'string' && errMsg.toLowerCase().includes('already been uploaded')) {
+      console.log('[Bunny Direct Upload] Video already uploaded to Bunny Stream CDN — marking as successful completion.');
+      onProgress?.(100);
+      return;
+    }
+    throw err;
+  }
 };
 
 export interface Course {
