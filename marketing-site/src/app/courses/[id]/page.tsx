@@ -302,7 +302,7 @@ export default async function CourseDetailPage({
 
       {/* 7. Why Mentorship is Different */}
       {program.whyDifferent && (
-        <section className="py-24 sm:py-32 bg-[#1A3B5E] text-white">
+        <section className="py-24 sm:py-32 bg-gradient-to-br from-[#2D939F] to-[#1B7A85]">
           <div className="mx-auto max-w-6xl px-5 sm:px-8">
             <div className="reveal max-w-3xl mx-auto text-center">
               <h2 className="font-display text-3xl sm:text-5xl font-semibold mb-6 text-white">
