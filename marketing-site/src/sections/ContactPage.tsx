@@ -5,7 +5,7 @@ import { Faq } from '@/components/Faq';
 
 export function ContactPageClient() {
   return (
-    <div className="pt-16 sm:pt-20">
+    <div className="pt-20 sm:pt-24">
       <ContactForm />
       <Faq />
     </div>
