@@ -23,7 +23,7 @@ export function CoursesPageClient() {
   return (
     <div className="pt-20 sm:pt-24">
       {/* Header & Courses Section */}
-      <section className="pt-8 pb-24 sm:pt-12 sm:pb-32">
+      <section className="pt-8 pb-32 sm:pt-12 sm:pb-40">
         <div className="mx-auto max-w-6xl px-5 sm:px-8">
           <div className="max-w-3xl">
             <p className="reveal text-sm font-semibold uppercase tracking-widest text-[#2D939F]">
