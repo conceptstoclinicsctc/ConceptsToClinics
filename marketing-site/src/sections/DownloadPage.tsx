@@ -78,8 +78,8 @@ export function DownloadPageClient() {
             </div>
 
             {/* Mobile App PNG Mockup Image */}
-            <div className="reveal relative flex justify-center">
-              <div className="relative inline-block">
+            <div className="reveal relative flex justify-center overflow-visible">
+              <div className="relative inline-block overflow-visible">
                 <img
                   src="/app-mockup.png?v=3"
                   alt="Concepts to Clinics Mobile App Screen"
@@ -87,7 +87,7 @@ export function DownloadPageClient() {
                   className="drop-shadow-xl transition-transform duration-500 hover:scale-[1.02]"
                 />
 
-                <div className="absolute bottom-6 -left-6 animate-float rounded-2xl bg-white px-3.5 py-1.5 shadow-xl border border-[#D8E9F1] rotate-[-4deg] whitespace-nowrap">
+                <div className="absolute bottom-16 -left-8 animate-float rounded-2xl bg-white px-3.5 py-1.5 shadow-xl border border-[#D8E9F1] rotate-[-4deg] whitespace-nowrap">
                   <p className="font-display text-[10px] font-bold text-[#1A3B5E] flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-[#2D939F] animate-pulse" />
                     Concepts to Clinics Android App
