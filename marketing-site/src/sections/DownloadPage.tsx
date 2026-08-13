@@ -29,8 +29,9 @@ const features = [
 export function DownloadPageClient() {
   return (
     <div className="pt-20 sm:pt-24">
-      <section className="relative overflow-hidden pt-8 pb-16 sm:pt-12 sm:pb-24">
-        <div className="pointer-events-none absolute inset-0 -z-10">
+      <section className="relative pt-8 pb-16 sm:pt-12 sm:pb-24">
+        {/* Background blobs — clipped independently so pill isn't cut off */}
+        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute -top-24 -right-24 w-[34rem] h-[34rem] bg-[#2D939F]/12 animate-blob blur-2xl" />
           <div className="absolute top-40 -left-32 w-[26rem] h-[26rem] bg-[#254670]/10 animate-blob blur-2xl" style={{ animationDelay: '3s' }} />
         </div>
@@ -87,7 +88,7 @@ export function DownloadPageClient() {
                   className="drop-shadow-xl transition-transform duration-500 hover:scale-[1.02]"
                 />
 
-                <div className="absolute bottom-16 -left-8 animate-float rounded-2xl bg-white px-3.5 py-1.5 shadow-xl border border-[#D8E9F1] rotate-[-4deg] whitespace-nowrap">
+                <div className="absolute -bottom-3 -left-8 animate-float rounded-2xl bg-white px-3.5 py-1.5 shadow-xl border border-[#D8E9F1] rotate-[-4deg] whitespace-nowrap">
                   <p className="font-display text-[10px] font-bold text-[#1A3B5E] flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-[#2D939F] animate-pulse" />
                     Concepts to Clinics Android App
