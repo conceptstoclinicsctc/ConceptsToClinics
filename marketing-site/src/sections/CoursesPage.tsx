@@ -39,7 +39,7 @@ export function CoursesPageClient() {
           </div>
 
           {/* Filter Category Pills */}
-          <div className="reveal mt-8 mb-12 sm:mb-16 flex flex-wrap gap-2.5">
+          <div className="reveal mt-8 mb-8 flex flex-wrap gap-2.5">
             {tags.map((t) => (
               <button
                 key={t}
