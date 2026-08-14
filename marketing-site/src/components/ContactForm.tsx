@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { ArrowRight, CheckCircle2, Mail, MapPin, MessageCircle, Instagram, Youtube } from 'lucide-react';
+import { useState, useRef } from 'react';
+import emailjs from '@emailjs/browser';
+import { ArrowRight, CheckCircle2, Mail, MapPin, MessageCircle, Instagram, Youtube, Loader2 } from 'lucide-react';
 
 const programOptions = [
   'USMLE Step 1',
@@ -22,17 +23,27 @@ type FormState = {
 
 const empty: FormState = { name: '', email: '', subject: '', message: '' };
 
+// ── EmailJS IDs ─────────────────────────────────────────────────────────────
+const SERVICE_ID  = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID  ?? '';
+const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? '';
+const PUBLIC_KEY  = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY  ?? '';
+// ────────────────────────────────────────────────────────────────────────────
+
 export function ContactForm() {
-  const [form, setForm] = useState<FormState>(empty);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [form, setForm]           = useState<FormState>(empty);
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState('');
+  const [sending, setSending]     = useState(false);
+  const [error, setError]         = useState('');
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((f) => ({ ...f, [key]: value }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    // ── Client-side validation ──────────────────────────────────────────────
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       setError('Please fill in your name, email, and a quick message.');
       return;
@@ -41,14 +52,46 @@ export function ContactForm() {
       setError('That email does not look quite right.');
       return;
     }
+    // ────────────────────────────────────────────────────────────────────────
+
     setError('');
-    setSubmitted(true);
+    setSending(true);
+
+    try {
+      // Template variables sent to EmailJS:
+      //   {{from_name}}    — sender's name
+      //   {{from_email}}   — sender's email
+      //   {{program}}      — program of interest (optional)
+      //   {{message}}      — message body
+      //   {{to_email}}     — recipient (contact@conceptstoclinics.com)
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        {
+          from_name:  form.name,
+          from_email: form.email,
+          program:    form.subject || 'Not specified',
+          message:    form.message,
+          to_email:   'contact@conceptstoclinics.com',
+        },
+        PUBLIC_KEY,
+      );
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error('EmailJS error:', err);
+      setError('Something went wrong. Please try again or email us directly at contact@conceptstoclinics.com');
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
     <section className="pt-8 pb-24 sm:pt-12 sm:pb-32">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+
+          {/* ── Left: contact info ──────────────────────────────────────── */}
           <div className="lg:sticky lg:top-28">
             <p className="reveal text-sm font-semibold uppercase tracking-widest text-[#2D939F]">
               Get in touch
@@ -62,15 +105,16 @@ export function ContactForm() {
             </p>
 
             <div className="reveal mt-9 space-y-4">
-              <a href="mailto:hello@conceptstoclinics.com" className="flex items-center gap-4 group">
+              <a href="mailto:contact@conceptstoclinics.com" className="flex items-center gap-4 group">
                 <span className="grid place-items-center w-11 h-11 rounded-xl bg-[#E6F2F8] text-[#2D939F] transition-colors group-hover:bg-[#2D939F] group-hover:text-white">
                   <Mail className="w-5 h-5" />
                 </span>
                 <div>
                   <p className="text-xs text-[#5A6E82]">Email</p>
-                  <p className="font-medium text-[#1A3B5E]">hello@conceptstoclinics.com</p>
+                  <p className="font-medium text-[#1A3B5E]">contact@conceptstoclinics.com</p>
                 </div>
               </a>
+
               <a href="https://wa.me/923035078387" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group">
                 <span className="grid place-items-center w-11 h-11 rounded-xl bg-[#E6F2F8] text-[#2D939F] transition-colors group-hover:bg-[#2D939F] group-hover:text-white">
                   <MessageCircle className="w-5 h-5" />
@@ -80,6 +124,7 @@ export function ContactForm() {
                   <p className="font-medium text-[#1A3B5E]">+92 303 5078387</p>
                 </div>
               </a>
+
               <div className="flex items-center gap-4">
                 <span className="grid place-items-center w-11 h-11 rounded-xl bg-[#E6F2F8] text-[#2D939F]">
                   <MapPin className="w-5 h-5" />
@@ -89,6 +134,7 @@ export function ContactForm() {
                   <p className="font-medium text-[#1A3B5E]">Online · Worldwide</p>
                 </div>
               </div>
+
               <a href="https://www.instagram.com/conceptstoclinics?igsh=MndvZ21xaHhiYWli" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group">
                 <span className="grid place-items-center w-11 h-11 rounded-xl bg-[#E6F2F8] text-[#2D939F] transition-colors group-hover:bg-[#2D939F] group-hover:text-white">
                   <Instagram className="w-5 h-5" />
@@ -98,6 +144,7 @@ export function ContactForm() {
                   <p className="font-medium text-[#1A3B5E]">@conceptstoclinics</p>
                 </div>
               </a>
+
               <a href="https://www.youtube.com/@conceptstoclinics" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group">
                 <span className="grid place-items-center w-11 h-11 rounded-xl bg-[#E6F2F8] text-[#2D939F] transition-colors group-hover:bg-[#2D939F] group-hover:text-white">
                   <Youtube className="w-5 h-5" />
@@ -110,8 +157,10 @@ export function ContactForm() {
             </div>
           </div>
 
+          {/* ── Right: form card ────────────────────────────────────────── */}
           <div className="reveal rounded-3xl border border-[#D8E9F1] bg-white p-7 sm:p-9 shadow-xl shadow-[#D8E9F1]/40">
             {submitted ? (
+              /* ── Success state ──────────────────────────────────────── */
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <span className="grid place-items-center w-16 h-16 rounded-full bg-[#E0F4F6] text-[#2D939F]">
                   <CheckCircle2 className="w-8 h-8" />
@@ -126,17 +175,15 @@ export function ContactForm() {
                 </p>
                 <button
                   type="button"
-                  onClick={() => {
-                    setForm(empty);
-                    setSubmitted(false);
-                  }}
+                  onClick={() => { setForm(empty); setSubmitted(false); }}
                   className="mt-6 text-sm font-medium text-[#2D939F] underline decoration-[#254670] decoration-2 underline-offset-4 hover:text-[#257B85]"
                 >
                   Send another message
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} noValidate className="space-y-5">
+              /* ── Form ───────────────────────────────────────────────── */
+              <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-[#1A3B5E] mb-1.5">
@@ -148,7 +195,8 @@ export function ContactForm() {
                       value={form.name}
                       onChange={(e) => update('name', e.target.value)}
                       placeholder="Dr. Aftab Ali"
-                      className="w-full rounded-xl border border-[#D8E9F1] bg-[#F3F4F6] px-4 py-3 text-[#1A3B5E] placeholder:text-[#5A6E82]/50 focus:border-[#2D939F] focus:ring-2 focus:ring-[#2D939F]/20 focus:outline-none transition"
+                      disabled={sending}
+                      className="w-full rounded-xl border border-[#D8E9F1] bg-[#F3F4F6] px-4 py-3 text-[#1A3B5E] placeholder:text-[#5A6E82]/50 focus:border-[#2D939F] focus:ring-2 focus:ring-[#2D939F]/20 focus:outline-none transition disabled:opacity-60"
                     />
                   </div>
                   <div>
@@ -161,7 +209,8 @@ export function ContactForm() {
                       value={form.email}
                       onChange={(e) => update('email', e.target.value)}
                       placeholder="you@email.com"
-                      className="w-full rounded-xl border border-[#D8E9F1] bg-[#F3F4F6] px-4 py-3 text-[#1A3B5E] placeholder:text-[#5A6E82]/50 focus:border-[#2D939F] focus:ring-2 focus:ring-[#2D939F]/20 focus:outline-none transition"
+                      disabled={sending}
+                      className="w-full rounded-xl border border-[#D8E9F1] bg-[#F3F4F6] px-4 py-3 text-[#1A3B5E] placeholder:text-[#5A6E82]/50 focus:border-[#2D939F] focus:ring-2 focus:ring-[#2D939F]/20 focus:outline-none transition disabled:opacity-60"
                     />
                   </div>
                 </div>
@@ -174,7 +223,8 @@ export function ContactForm() {
                     id="subject"
                     value={form.subject}
                     onChange={(e) => update('subject', e.target.value)}
-                    className="w-full rounded-xl border border-[#D8E9F1] bg-[#F3F4F6] px-4 py-3 text-[#1A3B5E] focus:border-[#2D939F] focus:ring-2 focus:ring-[#2D939F]/20 focus:outline-none transition"
+                    disabled={sending}
+                    className="w-full rounded-xl border border-[#D8E9F1] bg-[#F3F4F6] px-4 py-3 text-[#1A3B5E] focus:border-[#2D939F] focus:ring-2 focus:ring-[#2D939F]/20 focus:outline-none transition disabled:opacity-60"
                   >
                     <option value="">Choose a program (optional)</option>
                     {programOptions.map((s) => (
@@ -193,7 +243,8 @@ export function ContactForm() {
                     value={form.message}
                     onChange={(e) => update('message', e.target.value)}
                     placeholder="Tell us what you need help with..."
-                    className="w-full rounded-xl border border-[#D8E9F1] bg-[#F3F4F6] px-4 py-3 text-[#1A3B5E] placeholder:text-[#5A6E82]/50 focus:border-[#2D939F] focus:ring-2 focus:ring-[#2D939F]/20 focus:outline-none transition resize-none"
+                    disabled={sending}
+                    className="w-full rounded-xl border border-[#D8E9F1] bg-[#F3F4F6] px-4 py-3 text-[#1A3B5E] placeholder:text-[#5A6E82]/50 focus:border-[#2D939F] focus:ring-2 focus:ring-[#2D939F]/20 focus:outline-none transition resize-none disabled:opacity-60"
                   />
                 </div>
 
@@ -205,14 +256,25 @@ export function ContactForm() {
 
                 <button
                   type="submit"
-                  className="group w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#2D939F] px-6 py-3.5 text-base font-medium text-white transition-all duration-300 hover:bg-[#257B85] hover:shadow-lg hover:shadow-[#1A3B5E]/20 hover:-translate-y-0.5"
+                  disabled={sending}
+                  className="group w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#2D939F] px-6 py-3.5 text-base font-medium text-white transition-all duration-300 hover:bg-[#257B85] hover:shadow-lg hover:shadow-[#1A3B5E]/20 hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                 >
-                  Send message
-                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  {sending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Sending…
+                    </>
+                  ) : (
+                    <>
+                      Send message
+                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </>
+                  )}
                 </button>
               </form>
             )}
           </div>
+
         </div>
       </div>
     </section>
