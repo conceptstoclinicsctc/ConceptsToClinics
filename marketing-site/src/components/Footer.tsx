@@ -10,7 +10,7 @@ const navLinks = [
 
 const socialLinks = [
   { label: 'WhatsApp', icon: MessageCircle, href: 'https://wa.me/923035078387' },
-  { label: 'Email', icon: Mail, href: 'mailto:hello@conceptstoclinics.com' },
+  { label: 'Email', icon: Mail, href: 'mailto:contact@conceptstoclinics.com' },
   { label: 'Instagram', icon: Instagram, href: 'https://www.instagram.com/conceptstoclinics?igsh=MndvZ21xaHhiYWli' },
   { label: 'YouTube', icon: Youtube, href: 'https://www.youtube.com/@conceptstoclinics' },
 ];
