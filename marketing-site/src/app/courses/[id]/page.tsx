@@ -20,13 +20,30 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ id: string }>;
-}) {
+}): Promise<import('next').Metadata> {
   const { id } = await params;
   const program = programs.find((p) => p.id === id);
   if (!program) return { title: 'Course Not Found' };
+  const canonicalUrl = `https://conceptstoclinics.com/courses/${id}`;
+
   return {
-    title: `${program.title} — Concepts to Clinics`,
+    title: `${program.title} | Concepts to Clinics`,
     description: program.shortDesc,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `${program.title} | Concepts to Clinics`,
+      description: program.shortDesc,
+      url: canonicalUrl,
+      images: ['/logo.png'],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${program.title} | Concepts to Clinics`,
+      description: program.shortDesc,
+      images: ['/logo.png'],
+    },
   };
 }
 
