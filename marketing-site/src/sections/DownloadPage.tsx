@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Star, Check, Download, BarChart3, Play, ShieldCheck, BookOpen, Lock, ChevronRight } from 'lucide-react';
+import { Check, Download, BarChart3, Play, ShieldCheck, BookOpen, Lock, ChevronRight } from 'lucide-react';
 
 const features = [
   {
@@ -68,14 +68,6 @@ export function DownloadPageClient() {
                 </div>
               </div>
 
-              <div className="reveal mt-6 flex items-center gap-4 text-sm text-[#5A6E82]">
-                <div className="flex text-[#254670]">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
-                  ))}
-                </div>
-                <span>4.9 rating · 12,000+ medical students</span>
-              </div>
             </div>
 
             {/* Mobile App PNG Mockup Image */}
