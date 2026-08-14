@@ -57,16 +57,21 @@ export function ContactForm() {
     setError('');
     setSending(true);
 
+    const serviceId  = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || SERVICE_ID;
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || TEMPLATE_ID;
+    const publicKey  = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || PUBLIC_KEY;
+
+    if (!serviceId || !templateId || !publicKey) {
+      console.error('EmailJS configuration missing:', { serviceId, templateId, publicKey });
+      setError('Contact form configuration missing API keys. Please verify environment variables.');
+      setSending(false);
+      return;
+    }
+
     try {
-      // Template variables sent to EmailJS:
-      //   {{from_name}}    — sender's name
-      //   {{from_email}}   — sender's email
-      //   {{program}}      — program of interest (optional)
-      //   {{message}}      — message body
-      //   {{to_email}}     — recipient (contact@conceptstoclinics.com)
       await emailjs.send(
-        SERVICE_ID,
-        TEMPLATE_ID,
+        serviceId,
+        templateId,
         {
           from_name:  form.name,
           from_email: form.email,
@@ -74,13 +79,15 @@ export function ContactForm() {
           message:    form.message,
           to_email:   'contact@conceptstoclinics.com',
         },
-        PUBLIC_KEY,
+        publicKey,
       );
 
       setSubmitted(true);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('EmailJS error:', err);
-      setError('Something went wrong. Please try again or email us directly at contact@conceptstoclinics.com');
+      const emailJsError = err as { text?: string; message?: string; status?: number };
+      const detail = emailJsError?.text || emailJsError?.message || 'Unknown error';
+      setError(`Failed to send message (${detail}). Please try again or email us directly at contact@conceptstoclinics.com`);
     } finally {
       setSending(false);
     }
