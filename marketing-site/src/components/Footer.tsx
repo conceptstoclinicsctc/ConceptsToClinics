@@ -23,9 +23,9 @@ export function Footer() {
           <div>
             <Link href="/" className="flex items-center gap-2.5">
               <img
-                src="/app-icon.png"
-                alt="Concepts to Clinics Icon"
-                className="w-9 h-9 object-contain rounded-xl"
+                src="/logo.png"
+                alt="Concepts to Clinics Logo"
+                className="w-10 h-10 object-contain rounded-lg bg-white p-0.5"
               />
               <span className="font-display text-lg font-semibold">
                 Concepts to Clinics

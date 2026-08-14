@@ -46,9 +46,9 @@ export function Header() {
       <div className="mx-auto max-w-6xl px-5 sm:px-8 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 group">
           <img
-            src="/app-icon.png"
-            alt="Concepts to Clinics Icon"
-            className="w-9 h-9 object-contain rounded-xl transition-transform duration-500 group-hover:scale-105"
+            src="/logo.png"
+            alt="Concepts to Clinics Logo"
+            className="w-10 h-10 object-contain transition-transform duration-500 group-hover:scale-105"
           />
           <span className="font-display text-lg font-semibold tracking-tight text-[#1A3B5E]">
             Concepts to Clinics
