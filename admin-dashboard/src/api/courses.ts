@@ -24,6 +24,11 @@ export const initiateDirectUpload = async (
   return res.data;
 };
 
+export interface TusUploadHandle {
+  upload: tus.Upload;
+  promise: Promise<void>;
+}
+
 export const uploadVideoTusToBunny = (
   file: File,
   libraryId: string,
@@ -31,51 +36,69 @@ export const uploadVideoTusToBunny = (
   tusSignature: string,
   tusExpire: number,
   onProgress?: (percent: number) => void
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const upload = new tus.Upload(file, {
-      endpoint: 'https://video.bunnycdn.com/tusupload',
-      retryDelays: [0, 1000, 3000, 5000, 10000, 20000],
-      chunkSize: 5 * 1024 * 1024, // 5MB chunks for smooth background uploads
-      headers: {
-        AuthorizationSignature: tusSignature,
-        AuthorizationExpire: String(tusExpire),
-        VideoId: bunnyVideoGuid,
-        LibraryId: String(libraryId),
-      },
-      metadata: {
-        filetype: file.type || 'video/mp4',
-        title: file.name || 'video.mp4',
-      },
-      removeFingerprintOnSuccess: true,
-      onShouldRetry: (error) => {
-        console.warn('[TUS Upload] Network or background disconnect detected, retrying chunk...', error);
-        return true;
-      },
-      onError: (error: any) => {
-        const msg = error?.originalResponse?.getBody?.() || error?.message || '';
-        if (typeof msg === 'string' && msg.toLowerCase().includes('already been uploaded')) {
-          console.log(`[TUS Upload] Video ${bunnyVideoGuid} already uploaded to Bunny Stream, marking as success.`);
-          resolve();
-          return;
-        }
-        console.error('[TUS Upload Error]', error);
-        reject(error);
-      },
-      onProgress: (bytesUploaded, bytesTotal) => {
-        if (bytesTotal > 0) {
-          const percent = Math.round((bytesUploaded / bytesTotal) * 100);
-          onProgress?.(percent);
-        }
-      },
-      onSuccess: () => {
-        console.log(`[TUS Upload] Successfully completed upload for video ${bunnyVideoGuid}`);
-        resolve();
-      },
-    });
+): TusUploadHandle => {
+  let resolve!: () => void;
+  let reject!: (err: unknown) => void;
+  const promise = new Promise<void>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
 
+  const upload = new tus.Upload(file, {
+    endpoint: 'https://video.bunnycdn.com/tusupload',
+    // storeFingerprintForResuming: true enables cross-session resume via localStorage.
+    // If the user closes Chrome entirely and reopens, we can pick up where we left off.
+    storeFingerprintForResuming: true,
+    removeFingerprintOnSuccess: true,
+    // NOTE: Do NOT set chunkSize — per tus docs it hurts upload performance.
+    // The library picks the optimal chunk size automatically.
+    retryDelays: [0, 1000, 3000, 5000, 10000, 20000],
+    headers: {
+      AuthorizationSignature: tusSignature,
+      AuthorizationExpire: String(tusExpire),
+      VideoId: bunnyVideoGuid,
+      LibraryId: String(libraryId),
+    },
+    metadata: {
+      filetype: file.type || 'video/mp4',
+      title: file.name || 'video.mp4',
+    },
+    onShouldRetry: (error) => {
+      console.warn('[TUS Upload] Network or background disconnect, retrying...', error);
+      return true;
+    },
+    onError: (error: any) => {
+      const msg = error?.originalResponse?.getBody?.() || error?.message || '';
+      if (typeof msg === 'string' && msg.toLowerCase().includes('already been uploaded')) {
+        console.log(`[TUS Upload] Video ${bunnyVideoGuid} already uploaded — marking as success.`);
+        resolve();
+        return;
+      }
+      console.error('[TUS Upload Error]', error);
+      reject(error);
+    },
+    onProgress: (bytesUploaded, bytesTotal) => {
+      if (bytesTotal > 0) {
+        const percent = Math.round((bytesUploaded / bytesTotal) * 100);
+        onProgress?.(percent);
+      }
+    },
+    onSuccess: () => {
+      console.log(`[TUS Upload] Completed upload for video ${bunnyVideoGuid}`);
+      resolve();
+    },
+  });
+
+  // Check localStorage for a previous upload of this file (cross-session resume).
+  upload.findPreviousUploads().then((previousUploads) => {
+    if (previousUploads.length > 0) {
+      console.log(`[TUS Upload] Resuming previous upload for ${bunnyVideoGuid} from stored offset.`);
+      upload.resumeFromPreviousUpload(previousUploads[0]);
+    }
     upload.start();
   });
+
+  return { upload, promise };
 };
 
 export const uploadVideoDirectToBunny = async (

@@ -7,6 +7,7 @@ import {
   RiArrowDownSLine,
   RiArrowUpSLine,
   RiLoader4Line,
+  RiPauseCircleLine,
 } from 'react-icons/ri';
 
 export const FloatingUploadManager: React.FC = () => {
@@ -15,7 +16,9 @@ export const FloatingUploadManager: React.FC = () => {
   if (tasks.length === 0) return null;
 
   const activeCount = tasks.filter((t) => t.status === 'uploading').length;
+  const pausedCount = tasks.filter((t) => t.status === 'paused').length;
   const completedCount = tasks.filter((t) => t.status === 'completed').length;
+  const anyActive = activeCount > 0 || pausedCount > 0;
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 B';
@@ -62,26 +65,42 @@ export const FloatingUploadManager: React.FC = () => {
               width: 32,
               height: 32,
               borderRadius: 8,
-              background: activeCount > 0 ? 'rgba(99, 102, 241, 0.15)' : 'rgba(16, 185, 129, 0.15)',
+              background: activeCount > 0
+                ? 'rgba(99, 102, 241, 0.15)'
+                : pausedCount > 0
+                ? 'rgba(245, 158, 11, 0.15)'
+                : 'rgba(16, 185, 129, 0.15)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: activeCount > 0 ? 'var(--primary, #6366F1)' : '#10B981',
+              color: activeCount > 0
+                ? 'var(--primary, #6366F1)'
+                : pausedCount > 0
+                ? '#F59E0B'
+                : '#10B981',
             }}
           >
             {activeCount > 0 ? (
               <RiLoader4Line className="spin" style={{ fontSize: 18 }} />
+            ) : pausedCount > 0 ? (
+              <RiPauseCircleLine style={{ fontSize: 18 }} />
             ) : (
               <RiCheckLine style={{ fontSize: 18 }} />
             )}
           </div>
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#F8FAFC' }}>
-              {activeCount > 0 ? `Uploading ${activeCount} video${activeCount > 1 ? 's' : ''}...` : 'Uploads Completed'}
+              {activeCount > 0
+                ? `Uploading ${activeCount} video${activeCount > 1 ? 's' : ''}...`
+                : pausedCount > 0
+                ? `${pausedCount} upload${pausedCount > 1 ? 's' : ''} paused`
+                : 'Uploads Completed'}
             </div>
             <div style={{ fontSize: 11, color: '#94A3B8' }}>
               {activeCount > 0
                 ? `${activeCount} in progress`
+                : pausedCount > 0
+                ? 'Return to this tab to resume'
                 : `${completedCount} completed task${completedCount > 1 ? 's' : ''}`}
             </div>
           </div>
@@ -151,6 +170,12 @@ export const FloatingUploadManager: React.FC = () => {
                         {task.progress}%
                       </span>
                     )}
+                    {task.status === 'paused' && (
+                      <span style={{ fontSize: 12, fontWeight: 700, color: '#F59E0B', display: 'flex', alignItems: 'center', gap: 3 }}>
+                        <RiPauseCircleLine style={{ fontSize: 14 }} />
+                        {task.progress}%
+                      </span>
+                    )}
                     {task.status === 'completed' && (
                       <RiCheckLine style={{ color: '#10B981', fontSize: 18 }} />
                     )}
@@ -179,7 +204,7 @@ export const FloatingUploadManager: React.FC = () => {
                 </div>
 
                 {/* Progress Bar */}
-                {task.status === 'uploading' && (
+                {(task.status === 'uploading' || task.status === 'paused') && (
                   <div
                     style={{
                       width: '100%',
@@ -194,11 +219,18 @@ export const FloatingUploadManager: React.FC = () => {
                       style={{
                         width: `${task.progress}%`,
                         height: '100%',
-                        background: 'linear-gradient(90deg, #6366F1 0%, #818CF8 100%)',
+                        background: task.status === 'paused'
+                          ? 'linear-gradient(90deg, #F59E0B 0%, #FCD34D 100%)'
+                          : 'linear-gradient(90deg, #6366F1 0%, #818CF8 100%)',
                         borderRadius: 3,
                         transition: 'width 0.2s ease',
                       }}
                     />
+                  </div>
+                )}
+                {task.status === 'paused' && (
+                  <div style={{ fontSize: 10, color: '#F59E0B', marginTop: 4, fontWeight: 500 }}>
+                    ⏸ Paused — switch back to this tab to resume
                   </div>
                 )}
 
