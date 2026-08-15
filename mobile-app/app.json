@@ -2,7 +2,7 @@
   "expo": {
     "name": "Concepts To Clinics",
     "slug": "mobile-app",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
@@ -11,7 +11,7 @@
     },
     "android": {
       "package": "com.conceptstoclinics.app",
-      "versionCode": 3,
+      "versionCode": 4,
       "googleServicesFile": "./google-services.json",
       "icon": "./assets/icon.png",
       "adaptiveIcon": {
