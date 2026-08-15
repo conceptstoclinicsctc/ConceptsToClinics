@@ -250,12 +250,21 @@ const VideoPlayerScreen = ({ navigation, route }: Props) => {
   }, [sendProgress]);
 
   useEffect(() => {
-    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+    const handleBack = () => {
+      if (isLandscape) {
+        ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+        setTimeout(() => {
+          ScreenOrientation.unlockAsync();
+        }, 1000);
+        return true; // Consume back press to exit fullscreen and stay on player screen
+      }
       sendProgress();
-      return false;
-    });
+      return false; // Default back navigation to playlist
+    };
+
+    const sub = BackHandler.addEventListener('hardwareBackPress', handleBack);
     return () => sub.remove();
-  }, [sendProgress]);
+  }, [isLandscape, sendProgress]);
 
   const handleWebViewMessage = useCallback(
     (event: WebViewMessageEvent) => {
