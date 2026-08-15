@@ -18,7 +18,6 @@ export const FloatingUploadManager: React.FC = () => {
   const activeCount = tasks.filter((t) => t.status === 'uploading').length;
   const pausedCount = tasks.filter((t) => t.status === 'paused').length;
   const completedCount = tasks.filter((t) => t.status === 'completed').length;
-  const anyActive = activeCount > 0 || pausedCount > 0;
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 B';
