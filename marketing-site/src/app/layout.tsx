@@ -20,9 +20,9 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   metadataBase: new URL('https://conceptstoclinics.com'),
   icons: {
-    icon: '/app-icon.png',
-    shortcut: '/app-icon.png',
-    apple: '/app-icon.png',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
   title: {
     default: 'Concepts to Clinics | USMLE, FCPS, MBBS & NRE Medical Preparation',
