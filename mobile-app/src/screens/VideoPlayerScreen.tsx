@@ -10,6 +10,7 @@ import {
   ScrollView,
   useWindowDimensions,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';

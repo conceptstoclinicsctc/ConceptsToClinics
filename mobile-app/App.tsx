@@ -13,7 +13,7 @@ export default function App(): React.JSX.Element {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <StatusBar style="light" backgroundColor="#0F172A" />
+        <StatusBar style="light" />
         <RootNavigator />
       </SafeAreaProvider>
     </GestureHandlerRootView>

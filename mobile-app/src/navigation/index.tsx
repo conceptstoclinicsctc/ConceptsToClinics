@@ -9,6 +9,8 @@ import { COLORS } from '../constants/theme';
 import { fetchVersionConfig } from '../api/config';
 import type { VersionConfig } from '../api/config';
 import UpdateRequiredModal from '../components/UpdateRequiredModal';
+import EmulatorBlockedModal from '../components/EmulatorBlockedModal';
+import { checkIsEmulator } from '../utils/security';
 
 const isVersionOutdated = (installed: string, required: string): boolean => {
   const cParts = installed.split('.').map((n) => parseInt(n, 10) || 0);
@@ -25,6 +27,7 @@ const isVersionOutdated = (installed: string, required: string): boolean => {
 
 const RootNavigator = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isEmulatorBlocked, setIsEmulatorBlocked] = useState(false);
   const [updateRequired, setUpdateRequired] = useState(false);
   const [versionConfig, setVersionConfig] = useState<VersionConfig | null>(null);
 
@@ -33,6 +36,13 @@ const RootNavigator = () => {
   useEffect(() => {
     const bootstrap = async () => {
       try {
+        const isEmulator = await checkIsEmulator();
+        if (isEmulator) {
+          setIsEmulatorBlocked(true);
+          setIsLoading(false);
+          return;
+        }
+
         const [_, versionCfg] = await Promise.all([
           loadSession(),
           fetchVersionConfig().catch(() => null),
@@ -56,6 +66,14 @@ const RootNavigator = () => {
     return (
       <View style={styles.splash}>
         <ActivityIndicator size="large" color={COLORS.accentBlack} />
+      </View>
+    );
+  }
+
+  if (isEmulatorBlocked) {
+    return (
+      <View style={styles.splash}>
+        <EmulatorBlockedModal visible={true} />
       </View>
     );
   }

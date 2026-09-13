@@ -7,10 +7,18 @@ firebase-debug.*.log
 ui-debug.log
 .firebaserc.local
 
-# Environment secrets
+# Environment secrets & Keystores
 .env
 .env.local
 .env.*.local
+*.keystore
+*.jks
+keystore-backup/
+gradle.properties
+
+# Build outputs
+*.apk
+*.aab
 
 # OS
 .DS_Store

@@ -52,10 +52,10 @@ export function DownloadPageClient() {
               {/* Android Download Button */}
               <div className="reveal mt-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                 <a
-                  href="https://conceptstoclinics.b-cdn.net/concepts-to-clinics-v1.0.2.apk"
+                  href="https://conceptstoclinics.b-cdn.net/concepts-to-clinics-v1.0.4.apk"
                   target="_blank"
                   rel="noopener noreferrer"
-                  download="concepts-to-clinics-v1.0.2.apk"
+                  download="concepts-to-clinics-v1.0.4.apk"
                   className="inline-flex items-center gap-3 rounded-full bg-[#1A3B5E] px-7 py-3.5 text-base font-medium text-white transition-all duration-300 hover:bg-[#2D939F] hover:shadow-lg hover:shadow-[#1A3B5E]/15 hover:-translate-y-0.5"
                 >
                   <Download className="w-5 h-5" />
@@ -148,10 +148,10 @@ export function DownloadPageClient() {
 
             <div className="mt-8">
               <a
-                href="https://conceptstoclinics.b-cdn.net/concepts-to-clinics-v1.0.2.apk"
+                href="https://conceptstoclinics.b-cdn.net/concepts-to-clinics-v1.0.4.apk"
                 target="_blank"
                 rel="noopener noreferrer"
-                download="concepts-to-clinics-v1.0.2.apk"
+                download="concepts-to-clinics-v1.0.4.apk"
                 className="inline-flex items-center justify-center gap-3 rounded-full bg-[#1A3B5E] px-8 py-4 text-base font-medium text-white transition-all duration-300 hover:bg-[#2D939F] hover:shadow-lg hover:shadow-[#1A3B5E]/15 hover:-translate-y-0.5"
               >
                 <Download className="w-5 h-5" />
