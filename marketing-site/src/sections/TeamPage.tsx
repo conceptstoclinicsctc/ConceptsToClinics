@@ -38,7 +38,7 @@ const faculty: FacultyMember[] = [
     name: 'Rohan Lal',
     degree: 'MD',
     roleBadge: 'Associate Mentor',
-    roleTitle: 'ASSOCIATE MENTOR',
+    roleTitle: 'Associate Mentor',
     isFounder: false,
     image: '/dr-rohan.jpg',
     credentials: [
@@ -124,7 +124,7 @@ export function TeamPageClient() {
                       <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1A3B5E]">
                         {member.name}, <span className="text-[#2D939F]">{member.degree}</span>
                       </h2>
-                      <p className="mt-1 text-xs sm:text-sm font-semibold text-[#5A6E82] uppercase tracking-wide">
+                      <p className="mt-1 text-xs sm:text-sm font-semibold text-[#5A6E82] tracking-wide">
                         {member.roleTitle}
                       </p>
 
@@ -143,9 +143,11 @@ export function TeamPageClient() {
 
                   {/* Credentials Section */}
                   <div className="pt-2 border-t border-[#D8E9F1]/60">
-                    <p className="text-xs font-semibold uppercase tracking-widest text-[#5A6E82] mb-3">
-                      Verified Credentials
-                    </p>
+                    {!member.isFounder && (
+                      <p className="text-xs font-semibold uppercase tracking-widest text-[#5A6E82] mb-3">
+                        Verified Credentials
+                      </p>
+                    )}
                     <ul className="grid sm:grid-cols-2 gap-2.5">
                       {member.credentials.map((cred) => (
                         <li key={cred} className="flex items-start gap-2.5">

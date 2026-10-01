@@ -63,9 +63,6 @@ export function Founder() {
             </h2>
 
             <div className="reveal mt-8">
-              <p className="text-xs font-semibold uppercase tracking-widest text-[#5A6E82] mb-4">
-                Credentials
-              </p>
               <ul className="grid sm:grid-cols-2 gap-3">
                 {credentials.map((c) => (
                   <li key={c} className="flex items-start gap-3">

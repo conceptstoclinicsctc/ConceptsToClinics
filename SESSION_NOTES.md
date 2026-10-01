@@ -531,7 +531,8 @@ Implemented a full hierarchy refactor across **all 5 packages** in one session.
     - **`Rohan Lal, MD`**
   - Updated Aftab Ali's role subtitle to **`FOUNDER, LEAD TUTOR & MENTOR`** across both Home and Team screens.
   - Updated Hero badge to: `Founded by Aftab Ali, MD (Step 2 CK: 260+)`.
-  - Updated Footer tagline to: `by Aftab Ali, MD` and copyright line to `Concepts to Clinics by Aftab Ali`.
+  - Set Rohan Lal's role title to **`Associate Mentor`** on the Team page.
+  - Removed "Credentials" / "Verified Credentials" heading on Aftab Ali's cards across Home and Team pages while preserving all verified credential items.
   - Updated Schema.org JSON-LD and page metadata across all routes.
 - **Verification**:
   - Verified live on `localhost:3000` and `localhost:3000/team` with diagnostic asset checks passing 200 OK.
