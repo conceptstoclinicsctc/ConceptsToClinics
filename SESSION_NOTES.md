@@ -377,60 +377,111 @@ Implemented a full hierarchy refactor across **all 5 packages** in one session.
 - **Root Cause Identified**:
   - Vimeo unlisted videos require the **unlisted privacy hash** (`?h=...` or `1215063094/8738821432`).
   - Accessing an unlisted video embed URL without its `h` parameter returns a 403 Forbidden / Cloudflare verification block.
-380: - **Backend URL Parser ([`functions/src/routes/videos.ts`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/src/routes/videos.ts))**:
-381:   - Added `parseVimeoEmbedUrl()` helper function that automatically extracts the video ID and unlisted hash from:
-382:     - Full Vimeo iframe HTML embed codes (`<iframe src="...">`)
-383:     - Unlisted URLs (`https://vimeo.com/1215063094/8738821432` or `https://player.vimeo.com/video/1215063094?h=8738821432`)
-384:     - Short inputs (`1215063094/8738821432` or `1215063094?h=8738821432`)
-385:   - Live deployed to Firebase Cloud Functions (`https://asia-south1-concepts-to-clinics-dev.cloudfunctions.net/api`).
-386: - **Mobile Apps Player Updates ([`VideoPlayerScreen.tsx`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/src/screens/VideoPlayerScreen.tsx))**:
-387:   - Added `referrerpolicy="no-referrer-when-downgrade"` to `<iframe>` and `baseUrl: 'https://vimeo.com'` to `WebView` source in both `mobile-app` and `play-app`.
-388: - **Admin Dashboard Updates ([`CourseDetailPage.tsx`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/admin-dashboard/src/pages/CourseDetailPage.tsx))**:
-389:   - Updated video creation modal hints so tutors can paste the full Vimeo link, unlisted ID/hash, or full iframe HTML embed code directly.
-390: 
-391: ### 23. 🚫 Long-Press Context Menu Disabling & Vimeo Branding Controls (`functions`, `mobile-app`, `play-app`)
-392: - **Long-Press Menu Prevention ([`VideoPlayerScreen.tsx`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/src/screens/VideoPlayerScreen.tsx))**:
-393:   - Added CSS rule `-webkit-touch-callout: none !important; -webkit-user-select: none !important; user-select: none !important;` to embedded HTML player.
-394:   - Intercepted `contextmenu` and `selectstart` events in HTML/JS with `e.preventDefault(); e.stopPropagation(); return false;` to block the tap-and-hold context menu.
-395:   - Synchronized changes to both `mobile-app` and `play-app`.
-396: - **Vimeo Player Parameters ([`functions/src/routes/videos.ts`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/src/routes/videos.ts))**:
-397:   - Appended `badge=0`, `autopause=0`, and `vimeo_logo=0` query parameters to embed URLs returned by the backend.
-398:   - Live deployed to Firebase Cloud Functions (`https://asia-south1-concepts-to-clinics-dev.cloudfunctions.net/api`).
-399: 
-400: ### 24. 🎬 Migration to Bunny Stream, Player Inset & Fullscreen UI Fixes, and v1.0.2 Release Build (`functions`, `admin-dashboard`, `mobile-app`, `play-app`)
-401: - **Migrated Streaming Architecture to Bunny.net Stream**:
-402:   - Replaced legacy Vimeo infrastructure with **Bunny Stream** (`Bunny.net`).
-403:   - Implemented secure token-authenticated embed URL generation (`generateSignedEmbedUrl`) in [`functions/src/utils/bunnyStream.ts`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/src/utils/bunnyStream.ts) and backend endpoint [`functions/src/routes/videos.ts`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/src/routes/videos.ts).
-404:   - Integrated direct browser-to-Bunny Video Upload API in Admin Dashboard [`UploadContext.tsx`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/admin-dashboard/src/context/UploadContext.tsx).
-405: - **Environment & Repository Security**:
-406:   - Audited and created environment template files: [`functions/.env`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/.env), [`admin-dashboard/.env`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/admin-dashboard/.env), and [`marketing-site/.env.local`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/.env.local).
-407:   - Secured GitHub repository by converting visibility to **Private** to protect plain-text secrets and API credentials.
-408: - **Mobile Player UI & Safe Area Overlap Fixes ([`VideoPlayerScreen.tsx`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/src/screens/VideoPlayerScreen.tsx))**:
-409:   - **42×42 Centered Icon-Only Fullscreen Button**: Updated the fullscreen overlay toggle to a 42×42 circular pill button (`width: 42, height: 42, borderRadius: 21`) displaying icon-only text (`'⤢'` / `'⤓'`) with `includeFontPadding: false` and `textAlignVertical: 'center'` for exact baseline optical centering.
-410:   - **Landscape Safe View Protection**: Integrated `useSafeAreaInsets()` from `react-native-safe-area-context` to apply dynamic edge padding (`top`, `bottom`, `left`, `right`) when in landscape mode. This prevents Android system navigation bars, gesture handles, and camera cutouts from overlapping player options (quality and speed menus).
-411:   - Synchronized identical layout fixes across both `mobile-app` and `play-app`.
-412: - **Low-End & 32-Bit Architecture Support (Redmi A3 / Android Go)**:
-413:   - Configured `reactNativeArchitectures=armeabi-v7a,arm64-v8a,x86,x86_64` in `gradle.properties` to support older 32-bit hardware alongside 64-bit devices.
-414:   - Set `newArchEnabled=false` to optimize RAM footprint and execution stability on low-end budget processors.
-415: - **Version Bump & Local CLI Release APK Build**:
-416:   - Updated app version to **`1.0.2`** (`versionCode`: `3`) in [`mobile-app/package.json`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/package.json) and [`mobile-app/app.json`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/app.json).
-417:   - Installed **Node.js LTS (v24.19.0)** and **Eclipse Temurin JDK 17** locally.
-418:   - Executed Expo prebuild and compiled standalone Release APK: [`mobile-app/android/app/build/outputs/apk/release/app-release.apk`](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/android/app/build/outputs/apk/release/app-release.apk) (**83.2 MB**).
-419: 
-420: ---
-421: 
-422: ## Next Steps / Active Tasks 🚀
-423: - Test the generated v1.0.2 Release APK (`app-release.apk`) on physical devices (including Redmi A3 / 32-bit Android Go devices).
-424: - Verify landscape video playback, safe area inset padding, quality/speed controls, and fullscreen toggle behavior.
+- **Backend URL Parser ([functions/src/routes/videos.ts](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/src/routes/videos.ts))**:
+  - Added `parseVimeoEmbedUrl()` helper function that automatically extracts the video ID and unlisted hash from:
+    - Full Vimeo iframe HTML embed codes (`<iframe src="...">`)
+    - Unlisted URLs (`https://vimeo.com/1215063094/8738821432` or `https://player.vimeo.com/video/1215063094?h=8738821432`)
+    - Short inputs (`1215063094/8738821432` or `1215063094?h=8738821432`)
+  - Live deployed to Firebase Cloud Functions (`https://asia-south1-concepts-to-clinics-dev.cloudfunctions.net/api`).
+- **Mobile Apps Player Updates ([VideoPlayerScreen.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/src/screens/VideoPlayerScreen.tsx))**:
+  - Added `referrerpolicy="no-referrer-when-downgrade"` to `<iframe>` and `baseUrl: 'https://vimeo.com'` to `WebView` source in both `mobile-app` and `play-app`.
+- **Admin Dashboard Updates ([CourseDetailPage.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/admin-dashboard/src/pages/CourseDetailPage.tsx))**:
+  - Updated video creation modal hints so tutors can paste the full Vimeo link, unlisted ID/hash, or full iframe HTML embed code directly.
 
+---
 
+### 23. 🚫 Long-Press Context Menu Disabling & Vimeo Branding Controls (`functions`, `mobile-app`, `play-app`)
+- **Long-Press Menu Prevention ([VideoPlayerScreen.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/src/screens/VideoPlayerScreen.tsx))**:
+  - Added CSS rule `-webkit-touch-callout: none !important; -webkit-user-select: none !important; user-select: none !important;` to embedded HTML player.
+  - Intercepted `contextmenu` and `selectstart` events in HTML/JS with `e.preventDefault(); e.stopPropagation(); return false;` to block the tap-and-hold context menu.
+  - Synchronized changes to both `mobile-app` and `play-app`.
+- **Vimeo Player Parameters ([functions/src/routes/videos.ts](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/src/routes/videos.ts))**:
+  - Appended `badge=0`, `autopause=0`, and `vimeo_logo=0` query parameters to embed URLs returned by the backend.
+  - Live deployed to Firebase Cloud Functions (`https://asia-south1-concepts-to-clinics-dev.cloudfunctions.net/api`).
 
+---
 
+### 24. 🎬 Migration to Bunny Stream, Player Inset & Fullscreen UI Fixes, and v1.0.2 Release Build (`functions`, `admin-dashboard`, `mobile-app`, `play-app`)
+- **Migrated Streaming Architecture to Bunny.net Stream**:
+  - Replaced legacy Vimeo infrastructure with **Bunny Stream** (`Bunny.net`).
+  - Implemented secure token-authenticated embed URL generation (`generateSignedEmbedUrl`) in [functions/src/utils/bunnyStream.ts](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/src/utils/bunnyStream.ts) and backend endpoint [functions/src/routes/videos.ts](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/src/routes/videos.ts).
+  - Integrated direct browser-to-Bunny Video Upload API in Admin Dashboard [UploadContext.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/admin-dashboard/src/context/UploadContext.tsx).
+- **Environment & Repository Security**:
+  - Audited and created environment template files: [functions/.env](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/functions/.env), [admin-dashboard/.env](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/admin-dashboard/.env), and [marketing-site/.env.local](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/.env.local).
+  - Secured GitHub repository by converting visibility to **Private** to protect plain-text secrets and API credentials.
+- **Mobile Player UI & Safe Area Overlap Fixes ([VideoPlayerScreen.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/src/screens/VideoPlayerScreen.tsx))**:
+  - **42×42 Centered Icon-Only Fullscreen Button**: Updated the fullscreen overlay toggle to a 42×42 circular pill button (`width: 42, height: 42, borderRadius: 21`) displaying icon-only text (`'⤢'` / `'⤓'`) with `includeFontPadding: false` and `textAlignVertical: 'center'` for exact baseline optical centering.
+  - **Landscape Safe View Protection**: Integrated `useSafeAreaInsets()` from `react-native-safe-area-context` to apply dynamic edge padding (`top`, `bottom`, `left`, `right`) when in landscape mode. This prevents Android system navigation bars, gesture handles, and camera cutouts from overlapping player options (quality and speed menus).
+  - Synchronized identical layout fixes across both `mobile-app` and `play-app`.
+- **Low-End & 32-Bit Architecture Support (Redmi A3 / Android Go)**:
+  - Configured `reactNativeArchitectures=armeabi-v7a,arm64-v8a,x86,x86_64` in `gradle.properties` to support older 32-bit hardware alongside 64-bit devices.
+  - Set `newArchEnabled=false` to optimize RAM footprint and execution stability on low-end budget processors.
+- **Version Bump & Local CLI Release APK Build**:
+  - Updated app version to **`1.0.2`** (`versionCode`: `3`) in [mobile-app/package.json](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/package.json) and [mobile-app/app.json](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/app.json).
+  - Installed **Node.js LTS (v24.19.0)** and **Eclipse Temurin JDK 17** locally.
+  - Executed Expo prebuild and compiled standalone Release APK: [mobile-app/android/app/build/outputs/apk/release/app-release.apk](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/android/app/build/outputs/apk/release/app-release.apk) (**83.2 MB**).
 
+---
 
+### 25. 🔄 GitHub Remote Migration & Admin Dashboard Resilient Uploads (`admin-dashboard`, `repo`)
+- **Repository Remote Migration**:
+  - Re-anchored remote repository URL to client organization: `https://github.com/conceptstoclinicsctc/ConceptsToClinics.git`.
+  - Configured Vercel deployment targets with root directory set to `admin-dashboard`.
+- **TUS Upload Pause/Resume Handling ([UploadContext.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/admin-dashboard/src/context/UploadContext.tsx), [FloatingUploadManager.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/admin-dashboard/src/components/FloatingUploadManager.tsx))**:
+  - Implemented HTML5 Page Visibility API listeners to automatically pause active Bunny TUS video uploads when tab is backgrounded or system sleeps, and resume gracefully when reopened to prevent socket timeout terminations.
+  - Resolved TypeScript strict unused variable errors (`anyActive`).
 
+---
 
+### 26. 🛡️ Anti-Piracy: Android Emulator Detection & Global Window Security (`mobile-app`)
+- **Multi-Layer Native Heuristics ([SecurityModule.kt](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/android/app/src/main/java/com/conceptstoclinics/app/SecurityModule.kt))**:
+  - Designed custom Kotlin `SecurityModule` to block students from running the app inside PC emulators (BlueStacks, LDPlayer, Nox, WSA, MEmu, Android Studio) to record lectures via desktop capture software:
+    1. **Build Properties**: Heuristic matching across `Build.FINGERPRINT`, `Build.MODEL`, `Build.MANUFACTURER`, `Build.HARDWARE`, `Build.PRODUCT`, `Build.BOARD`, and `Build.HOST` for generic and virtual machine signatures (`goldfish`, `ranchu`, `vbox86`, `bluestacks`, `nox`, `mumu`, `ttvm`).
+    2. **Pipes & Drivers**: Checks for virtual device sockets and pipes (`/dev/qemu_pipe`, `/dev/socket/qemud`, `/dev/vboxguest`, `/dev/vboxuser`).
+    3. **Filesystem Markers**: Scans for BlueStacks, Nox, LDPlayer, and Genymotion runtime binaries and directories.
+    4. **CPU Inspection**: Reads `/proc/cpuinfo` to detect desktop x86 CPUs or hypervisor tags (`hypervisor`, `Intel(R)`, `AMD Ryzen`, `QEMU Virtual CPU`), guaranteeing execution only on physical mobile ARM SoCs.
+    5. **Sensors**: Verifies existence of physical hardware sensors (`Sensor.TYPE_ACCELEROMETER`), missing or mocked in virtual devices.
+  - Registered native module in [SecurityPackage.kt](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/android/app/src/main/java/com/conceptstoclinics/app/SecurityPackage.kt) and linked in [MainApplication.kt](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/android/app/src/main/java/com/conceptstoclinics/app/MainApplication.kt).
+- **Global `FLAG_SECURE` Enforcement ([MainActivity.kt](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/android/app/src/main/java/com/conceptstoclinics/app/MainActivity.kt))**:
+  - Applied `window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)` inside `onCreate()`.
+  - Blocks screenshots and screen recording OS-wide across all views (outlines, PDFs, notes, account, video player).
+- **React Native Security Gate ([security.ts](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/src/utils/security.ts), [EmulatorBlockedModal.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/src/components/EmulatorBlockedModal.tsx), [RootNavigator](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/src/navigation/index.tsx))**:
+  - Hooked `checkIsEmulator()` into app bootstrap before session loading or API token exchange.
+  - Displays non-dismissible, branded full-screen security gate on emulator detection with `BackHandler.exitApp()` action.
 
+---
 
+### 27. 🔑 Signing Key Inconsistency Fix & Permanent Keystore Standard (`mobile-app`)
+- **Root Cause Audit**:
+  - Cryptographic verification via `apksigner` confirmed `v1.0.2` and `v1.0.3` APKs were signed with the default debug key (`CN=Android Debug`, SHA-256: `FA:C6:17:45...`), while earlier `v1.0.4` was signed with `release.keystore` (`CN=ConceptsToClinics`, SHA-256: `5D:6F:23:8D...`).
+  - This certificate mismatch caused:
+    1. **"Package conflicts with an existing package"** on update.
+    2. **`AndroidID` recalculation** (scoped per signing key in Android 8.0+), falsely triggering device binding locks.
+  - Traced to `mobile-app/android/app/build.gradle` having an `else { signingConfig signingConfigs.debug }` fallback block.
+- **Permanent Keystore Standardization**:
+  - Standardized release keystore at [mobile-app/android/app/concepts-to-clinics-release.keystore](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/android/app/concepts-to-clinics-release.keystore) (Alias: `conceptstoclinics`, Valid until: **2053**, SHA-256: `5D:6F:23:8D:EC:F0:71:5B:9D:08:DB:3B:1C:39:AB:9D:B7:88:C5:72:6E:33:99:D0:FA:AD:5D:63:B9:FD:D7:14`).
+  - Created standalone secure backup in [keystore-backup/](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/keystore-backup/).
+  - Configured credentials in gitignored `mobile-app/android/gradle.properties` (`CC_KEYSTORE_PASSWORD`, `CC_KEY_ALIAS`, `CC_KEY_PASSWORD`).
+  - Hardened `build.gradle` to strictly sign with this permanent keystore and eliminated any fallback to debug.
+  - Documented permanently in [SIGNING.md](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/SIGNING.md) and [mobile-app/SIGNING.md](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/mobile-app/SIGNING.md).
 
+---
 
+### 28. 📦 Version 1.0.4 Release APK & Marketing Website Sync (`mobile-app`, `marketing-site`)
+- **Version Bump**:
+  - Set version to **`1.0.4`** (`versionCode`: `5`) across `package.json`, `app.json`, and `build.gradle`.
+- **Release APK Build**:
+  - Built standalone signed APK [concepts-to-clinics-v1.0.4.apk](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/concepts-to-clinics-v1.0.4.apk) (83.2 MB) signed with the permanent release key.
+- **Marketing Site Download Link Update ([DownloadPage.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/src/sections/DownloadPage.tsx))**:
+  - Updated hero and CTA download links to `https://conceptstoclinics.b-cdn.net/concepts-to-clinics-v1.0.4.apk`.
+  - Verified static build via `npm run build` (Next.js compiled all 15 routes cleanly).
+- **Git Tracking Alignment for Native Android**:
+  - Removed `/android` from `mobile-app/.gitignore` so bare native Android source code, gradle configuration, and Kotlin modules are properly tracked in version control, while ensuring `.keystore`, `gradle.properties`, and build caches remain gitignored.
+  - Committed and pushed all changes to `origin/main` (`7444c9e`).
+
+---
+
+## Next Steps / Active Tasks 🚀
+- Confirm Bunny CDN has `concepts-to-clinics-v1.0.4.apk` uploaded and reachable at `https://conceptstoclinics.b-cdn.net/concepts-to-clinics-v1.0.4.apk`.
+- If Google Play Console internal/closed testing track is needed, run `./gradlew bundleRelease` via junction `C:\ctc\android` to generate the matching signed `.aab` file.
+- Inform students updating from older v1.0.2/v1.0.3 builds that a one-time uninstall is required due to the transition from the legacy debug signing to the permanent release keystore.
