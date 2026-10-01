@@ -70,7 +70,7 @@ export function TeamPageClient() {
               Meet Your Instructors &amp; Mentors
             </h1>
             <p className="reveal mt-4 text-base sm:text-lg text-[#5A6E82] leading-relaxed">
-              Concepts to Clinics was founded by <strong className="text-[#1A3B5E] font-semibold">Aftab Ali, MD</strong> to deliver concept-driven clarity for medical licensing and professional examinations. Our educators are proven top-percentile scorers who conquered every licensing exam in their very first attempts.
+              Concepts to Clinics was founded by <strong className="text-[#1A3B5E] font-semibold">Dr. Aftab Ali, MD</strong>, to provide concept-driven, exam-focused medical education. Led by its Founder &amp; Lead Instructor and supported by a growing mentorship team, the platform combines structured teaching, practical guidance, and personalized mentorship for students preparing for medical licensing and professional examinations.
             </p>
           </div>
 
