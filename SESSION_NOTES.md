@@ -499,6 +499,9 @@ Implemented a full hierarchy refactor across **all 5 packages** in one session.
   - Preserved the pre-change single-founder version in `backup/original-single-founder/` along with a comprehensive [README.md](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/backup/README.md) and one-line restore commands.
 - **SEO & Schema Alignment ([layout.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/src/app/layout.tsx))**:
   - Preserved `founder` as Dr. Aftab Ali in JSON-LD `EducationalOrganization` schema; registered Dr. Rohan Lal under the `instructor` array.
+- **Footer Founder Attribution ([Footer.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/src/components/Footer.tsx))**:
+  - Added dedicated tagline `by Dr. Aftab Ali, MBBS` under the logo title in the footer brand column.
+  - Updated copyright line to `© 2026 Concepts to Clinics by Dr. Aftab Ali. All rights reserved.`.
 - **Build Verification**:
   - Ran `npm run build` — Next.js compiled all 15 routes with zero errors.
 

@@ -27,14 +27,19 @@ export function Footer() {
                 alt="Concepts to Clinics Logo"
                 className="w-10 h-10 object-contain rounded-lg bg-white p-0.5"
               />
-              <span className="font-display text-lg font-semibold">
-                Concepts to Clinics
-              </span>
+              <div>
+                <span className="font-display text-lg font-semibold block leading-tight">
+                  Concepts to Clinics
+                </span>
+                <span className="text-xs text-[#2D939F] font-semibold tracking-wide">
+                  by Dr. Aftab Ali, MBBS
+                </span>
+              </div>
             </Link>
             <p className="mt-4 text-sm text-white/70 max-w-xs leading-relaxed">
               Master Concepts. Excel in Clinics.
             </p>
-            <p className="mt-3 text-sm text-white/50 max-w-xs leading-relaxed">
+            <p className="mt-2 text-sm text-white/50 max-w-xs leading-relaxed">
               Comprehensive, concept-based medical education designed for MBBS,
               USMLE, FCPS, and NRE.
             </p>
@@ -81,7 +86,7 @@ export function Footer() {
         </div>
 
         <div className="mt-14 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/50">
-          <p>&copy; {new Date().getFullYear()} Concepts to Clinics. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Concepts to Clinics by Dr. Aftab Ali. All rights reserved.</p>
           <p>Built for medical learners everywhere.</p>
         </div>
       </div>
