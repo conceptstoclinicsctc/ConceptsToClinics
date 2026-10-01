@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     'MBBS online lectures',
     'First Aid USMLE video lectures',
     'concept based medical education',
-    'Dr. Aftab Ali MBBS',
+    'Dr. Aftab Ali MD',
     'medical student mentorship',
     'high yield clinical medical lectures',
     'Concepts to Clinics app',
@@ -108,7 +108,7 @@ export default function RootLayout({
       {
         '@type': 'Person',
         name: 'Dr. Rohan Lal',
-        jobTitle: 'Course Instructor',
+        jobTitle: 'Associate Mentor',
         sameAs: 'https://www.linkedin.com/in/rohan-lal-2aa7b6362/?isSelfProfile=true',
       },
     ],

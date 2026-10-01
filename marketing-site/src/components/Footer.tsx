@@ -4,6 +4,7 @@ import Link from 'next/link';
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'Courses', href: '/courses' },
+  { label: 'Team', href: '/team' },
   { label: 'Download & Login', href: '/download' },
   { label: 'Contact Us', href: '/contact' },
 ];
@@ -32,7 +33,7 @@ export function Footer() {
                   Concepts to Clinics
                 </span>
                 <span className="text-xs text-[#2D939F] font-semibold tracking-wide">
-                  by Dr. Aftab Ali, MBBS
+                  by Dr. Aftab Ali, MD
                 </span>
               </div>
             </Link>

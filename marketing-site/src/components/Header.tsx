@@ -9,6 +9,7 @@ import { useScrolled } from '@/hooks/useScrolled';
 const links = [
   { label: 'Home', href: '/' },
   { label: 'Courses', href: '/courses' },
+  { label: 'Team', href: '/team' },
   { label: 'Download', href: '/download' },
   { label: 'Contact', href: '/contact' },
 ];

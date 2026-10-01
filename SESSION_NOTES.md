@@ -507,8 +507,32 @@ Implemented a full hierarchy refactor across **all 5 packages** in one session.
 
 ---
 
+### 30. 🌐 Dedicated Team Page, Homescreen Founder Rollback, Title & Portrait Refresh (`marketing-site`)
+- **Homescreen Rollback**:
+  - Restored the single-founder showcase on the homepage ([Founder.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/src/components/Founder.tsx)), featuring exclusively Dr. Aftab Ali, MD.
+- **Dedicated Team Page (`/team`)**:
+  - Created [app/team/page.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/src/app/team/page.tsx) and [sections/TeamPage.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/src/sections/TeamPage.tsx) showcasing both faculty members:
+    - **Dr. Aftab Ali, MD**: Founder & Lead Instructor (elevated card, crown badge, full credentials).
+    - **Dr. Rohan Lal, MD**: Associate Mentor (crisp card, `Associate Mentor` badge, full credentials).
+  - Added mentorship callout CTA banner connecting students to courses and contacts.
+- **Navigation & Sitemap**:
+  - Added `Team` navigation link to [Header.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/src/components/Header.tsx) and [Footer.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/src/components/Footer.tsx).
+  - Registered `/team` in [sitemap.ts](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/src/app/sitemap.ts).
+- **Titles & Credentials Refinement**:
+  - Updated Dr. Aftab's qualification title to **MD** across Hero (`Founded by Dr. Aftab Ali, MD`), Founder section, Footer brand tagline (`by Dr. Aftab Ali, MD`), and schema.
+  - Retained **`2024 MBBS Graduate`** in credentials list.
+  - Added **`FCPS Part I – Medicine & Allied Passed`** to credentials on both Home and Team pages.
+  - Set Dr. Rohan Lal's role to **`Associate Mentor`** (title: `MD · Associate Mentor`).
+- **New Portrait Asset**:
+  - Applied new portrait (`436737.png`) for Dr. Aftab at `public/dr-aftab.jpg` and `public/dr-aftab.png` with cache-buster `?v=3`.
+- **Verification**:
+  - Verified live on `localhost:3000` and `localhost:3000/team` with diagnostic asset checks passing 200 OK.
+
+---
+
 ## Next Steps / Active Tasks 🚀
 - Confirm Bunny CDN has `concepts-to-clinics-v1.0.4.apk` uploaded and reachable at `https://conceptstoclinics.b-cdn.net/concepts-to-clinics-v1.0.4.apk`.
 - If Google Play Console internal/closed testing track is needed, run `./gradlew bundleRelease` via junction `C:\ctc\android` to generate the matching signed `.aab` file.
 - Inform students updating from older v1.0.2/v1.0.3 builds that a one-time uninstall is required due to the transition from the legacy debug signing to the permanent release keystore.
+
 
