@@ -17,10 +17,10 @@ interface FacultyMember {
 
 const faculty: FacultyMember[] = [
   {
-    name: 'Dr. Aftab Ali',
+    name: 'Aftab Ali',
     degree: 'MD',
-    roleBadge: 'Founder & Lead Instructor',
-    roleTitle: 'MD · Founder & Lead Instructor',
+    roleBadge: 'Founder, Lead Tutor & Mentor',
+    roleTitle: 'FOUNDER, LEAD TUTOR & MENTOR',
     isFounder: true,
     image: '/dr-aftab.jpg?v=3',
     credentials: [
@@ -35,10 +35,10 @@ const faculty: FacultyMember[] = [
     linkedin: 'https://www.linkedin.com/in/aftab-ali-b943bb182',
   },
   {
-    name: 'Dr. Rohan Lal',
+    name: 'Rohan Lal',
     degree: 'MD',
     roleBadge: 'Associate Mentor',
-    roleTitle: 'MD · Associate Mentor',
+    roleTitle: 'ASSOCIATE MENTOR',
     isFounder: false,
     image: '/dr-rohan.jpg',
     credentials: [
@@ -70,7 +70,7 @@ export function TeamPageClient() {
               Meet Your Instructors &amp; Mentors
             </h1>
             <p className="reveal mt-4 text-base sm:text-lg text-[#5A6E82] leading-relaxed">
-              Concepts to Clinics was founded by <strong className="text-[#1A3B5E] font-semibold">Dr. Aftab Ali, MD</strong> to deliver concept-driven clarity for medical licensing and professional examinations. Our educators are proven top-percentile scorers who conquered every licensing exam in their very first attempts.
+              Concepts to Clinics was founded by <strong className="text-[#1A3B5E] font-semibold">Aftab Ali, MD</strong> to deliver concept-driven clarity for medical licensing and professional examinations. Our educators are proven top-percentile scorers who conquered every licensing exam in their very first attempts.
             </p>
           </div>
 
@@ -92,7 +92,7 @@ export function TeamPageClient() {
                     {member.isFounder ? (
                       <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#1A3B5E] to-[#254670] text-white text-xs font-bold tracking-wider uppercase shadow-sm">
                         <Crown className="w-3.5 h-3.5 text-[#2D939F]" />
-                        <span>Founder &amp; Lead Instructor</span>
+                        <span>Founder, Lead Tutor &amp; Mentor</span>
                       </div>
                     ) : (
                       <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E0F4F6] text-[#2D939F] border border-[#2D939F]/30 text-xs font-bold tracking-wider uppercase">

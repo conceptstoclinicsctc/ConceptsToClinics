@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     template: '%s | Concepts to Clinics',
   },
   description:
-    'Master medical concepts & excel in clinical exams. First Aid-integrated lecture series, clinical correlations, and structured mentorship for USMLE Step 1, FCPS Part 1, MBBS & NRE by Dr. Aftab Ali.',
+    'Master medical concepts & excel in clinical exams. First Aid-integrated lecture series, clinical correlations, and structured mentorship for USMLE Step 1, FCPS Part 1, MBBS & NRE by Aftab Ali, MD.',
   keywords: [
     'USMLE Step 1 preparation',
     'FCPS Part 1 course',
@@ -37,12 +37,12 @@ export const metadata: Metadata = {
     'MBBS online lectures',
     'First Aid USMLE video lectures',
     'concept based medical education',
-    'Dr. Aftab Ali MD',
+    'Aftab Ali MD',
     'medical student mentorship',
     'high yield clinical medical lectures',
     'Concepts to Clinics app',
   ],
-  authors: [{ name: 'Dr. Aftab Ali', url: 'https://www.linkedin.com/in/aftab-ali-b943bb182' }],
+  authors: [{ name: 'Aftab Ali, MD', url: 'https://www.linkedin.com/in/aftab-ali-b943bb182' }],
   creator: 'Concepts to Clinics',
   publisher: 'Concepts to Clinics',
   robots: {
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Concepts to Clinics | USMLE, FCPS, MBBS & NRE Medical Preparation',
     description:
-      'Structured First Aid-integrated medical lectures and 1-on-1 mentorship connecting basic sciences to clinical practice. Founded by Dr. Aftab Ali.',
+      'Structured First Aid-integrated medical lectures and 1-on-1 mentorship connecting basic sciences to clinical practice. Founded by Aftab Ali, MD.',
     url: 'https://conceptstoclinics.com',
     siteName: 'Concepts to Clinics',
     images: [
@@ -100,14 +100,14 @@ export default function RootLayout({
       'Comprehensive, concept-based medical education platform designed for USMLE, FCPS, MBBS, and NRE.',
     founder: {
       '@type': 'Person',
-      name: 'Dr. Aftab Ali',
-      jobTitle: 'Founder & Lead Instructor',
+      name: 'Aftab Ali',
+      jobTitle: 'Founder, Lead Tutor & Mentor',
       sameAs: 'https://www.linkedin.com/in/aftab-ali-b943bb182',
     },
     instructor: [
       {
         '@type': 'Person',
-        name: 'Dr. Rohan Lal',
+        name: 'Rohan Lal',
         jobTitle: 'Associate Mentor',
         sameAs: 'https://www.linkedin.com/in/rohan-lal-2aa7b6362/?isSelfProfile=true',
       },

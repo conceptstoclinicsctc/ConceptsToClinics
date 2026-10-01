@@ -33,7 +33,7 @@ export function Footer() {
                   Concepts to Clinics
                 </span>
                 <span className="text-xs text-[#2D939F] font-semibold tracking-wide">
-                  by Dr. Aftab Ali, MD
+                  by Aftab Ali, MD
                 </span>
               </div>
             </Link>
@@ -87,7 +87,7 @@ export function Footer() {
         </div>
 
         <div className="mt-14 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/50">
-          <p>&copy; {new Date().getFullYear()} Concepts to Clinics by Dr. Aftab Ali. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Concepts to Clinics by Aftab Ali. All rights reserved.</p>
           <p>Built for medical learners everywhere.</p>
         </div>
       </div>

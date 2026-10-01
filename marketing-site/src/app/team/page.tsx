@@ -4,12 +4,12 @@ import { TeamPageClient } from '@/sections/TeamPage';
 export const metadata: Metadata = {
   title: 'Faculty & Mentors | Concepts to Clinics',
   description:
-    'Meet the faculty and educators behind Concepts to Clinics. Founded by Dr. Aftab Ali, MD with Course Instructor Dr. Rohan Lal, MD, featuring top-tier USMLE and FCPS scorers.',
+    'Meet the faculty and educators behind Concepts to Clinics. Founded by Aftab Ali, MD with Associate Mentor Rohan Lal, MD, featuring top-tier USMLE and FCPS scorers.',
   keywords: [
     'Concepts to Clinics faculty',
     'medical mentors',
-    'Dr. Aftab Ali MD',
-    'Dr. Rohan Lal MD',
+    'Aftab Ali MD',
+    'Rohan Lal MD',
     'USMLE tutors',
     'FCPS mentorship',
     'concept based medical education',

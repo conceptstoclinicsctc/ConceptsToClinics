@@ -21,11 +21,11 @@ export function Hero() {
           >
             <img
               src="/dr-aftab.jpg?v=3"
-              alt="Dr. Aftab Ali, MD"
+              alt="Aftab Ali, MD"
               className="w-9 h-9 rounded-full object-cover object-top border-2 border-[#2D939F] group-hover:scale-105 transition-transform"
             />
             <span className="text-xs font-semibold text-[#1A3B5E] group-hover:text-[#2D939F] transition-colors">
-              Founded by <strong className="text-[#2D939F]">Dr. Aftab Ali, MD</strong> (Step 2 CK: 260+)
+              Founded by <strong className="text-[#2D939F]">Aftab Ali, MD</strong> (Step 2 CK: 260+)
             </span>
           </a>
 

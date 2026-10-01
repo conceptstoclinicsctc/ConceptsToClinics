@@ -23,17 +23,17 @@ export function Founder() {
               <div className="aspect-[3/4] rounded-[2.5rem] overflow-hidden bg-slate-900 border-4 border-white shadow-2xl relative group">
                 <img
                   src="/dr-aftab.jpg?v=3"
-                  alt="Dr. Aftab Ali, MD — Founder & Lead Instructor"
+                  alt="Aftab Ali, MD — Founder, Lead Tutor & Mentor"
                   className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1A3B5E]/75 via-[#1A3B5E]/20 to-transparent" />
                 
                 <div className="absolute bottom-14 sm:bottom-16 left-6 right-6 text-center text-white z-10">
                   <p className="font-display text-2xl font-semibold text-white drop-shadow-md">
-                    Dr. Aftab Ali
+                    Aftab Ali
                   </p>
                   <p className="mt-1 text-xs font-semibold text-[#2D939F] uppercase tracking-wider drop-shadow">
-                    MD · Founder & Lead Instructor
+                    FOUNDER, LEAD TUTOR &amp; MENTOR
                   </p>
                 </div>
               </div>
@@ -56,10 +56,10 @@ export function Founder() {
 
           <div>
             <p className="reveal text-sm font-semibold uppercase tracking-widest text-[#2D939F]">
-              Meet Your Founder &amp; Lead Instructor
+              Meet Your Founder
             </p>
             <h2 className="reveal mt-3 font-display text-4xl sm:text-5xl font-semibold tracking-tight text-[#1A3B5E]">
-              Dr. Aftab Ali, MD
+              Aftab Ali, MD
             </h2>
 
             <div className="reveal mt-8">

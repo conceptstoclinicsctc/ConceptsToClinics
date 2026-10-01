@@ -525,6 +525,14 @@ Implemented a full hierarchy refactor across **all 5 packages** in one session.
   - Set Dr. Rohan Lal's role to **`Associate Mentor`** (title: `MD · Associate Mentor`).
 - **New Portrait Asset**:
   - Applied new portrait (`436737.png`) for Dr. Aftab at `public/dr-aftab.jpg` and `public/dr-aftab.png` with cache-buster `?v=3`.
+- **Titles & Role Refinement**:
+  - Removed "Dr." prefix for both faculty members across the site; formatted strictly as Name + MD:
+    - **`Aftab Ali, MD`**
+    - **`Rohan Lal, MD`**
+  - Updated Aftab Ali's role subtitle to **`FOUNDER, LEAD TUTOR & MENTOR`** across both Home and Team screens.
+  - Updated Hero badge to: `Founded by Aftab Ali, MD (Step 2 CK: 260+)`.
+  - Updated Footer tagline to: `by Aftab Ali, MD` and copyright line to `Concepts to Clinics by Aftab Ali`.
+  - Updated Schema.org JSON-LD and page metadata across all routes.
 - **Verification**:
   - Verified live on `localhost:3000` and `localhost:3000/team` with diagnostic asset checks passing 200 OK.
 
