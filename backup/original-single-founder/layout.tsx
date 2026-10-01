@@ -104,14 +104,6 @@ export default function RootLayout({
       jobTitle: 'Founder & Lead Instructor',
       sameAs: 'https://www.linkedin.com/in/aftab-ali-b943bb182',
     },
-    instructor: [
-      {
-        '@type': 'Person',
-        name: 'Dr. Rohan Lal',
-        jobTitle: 'Course Instructor',
-        sameAs: 'https://www.linkedin.com/in/rohan-lal-2aa7b6362/?isSelfProfile=true',
-      },
-    ],
     sameAs: [
       'https://www.linkedin.com/in/aftab-ali-b943bb182',
       'https://www.instagram.com/conceptstoclinics',

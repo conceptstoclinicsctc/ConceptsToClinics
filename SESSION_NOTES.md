@@ -481,7 +481,31 @@ Implemented a full hierarchy refactor across **all 5 packages** in one session.
 
 ---
 
+### 29. 👨‍⚕️ Faculty Expansion: Course Instructor Onboarding & Hierarchy Hardening (`marketing-site`)
+- **Faculty Addition**:
+  - Added **Dr. Rohan Lal, MD** as Course Instructor / Clinical Tutor.
+  - Image added: [dr-rohan.jpg](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/public/dr-rohan.jpg) from provided high-res portrait.
+  - Verified Credentials: YOG 2023, House Job at GMMMC Sukkur, USMLE Step 1 (Pass), USMLE Step 2 CK (254), USMLE Step 3 (234), FCPS Part 1 Medicine & Allied (Pass), All in First Attempt, Medical Officer / Match 2027 Applicant, LinkedIn integration.
+- **Founder Hierarchy Hardening**:
+  - Maintained **Dr. Aftab Ali, MBBS** as the sole Founder & Lead Instructor across the platform.
+  - Top Hero badge remains exclusively dedicated to Dr. Aftab (`Founded by Dr. Aftab Ali, MBBS (Step 2 CK: 260+)`).
+  - Faculty section ([Founder.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/src/components/Founder.tsx)) framed as *"Faculty & Mentorship: Learn from Top-Tier Scorers & Clinicians"*.
+  - Dr. Aftab's card styled with an elevated Navy/Teal ring and a distinct **`FOUNDER & LEAD INSTRUCTOR`** crown badge.
+  - Dr. Rohan's card styled with a clear **`COURSE INSTRUCTOR`** badge and subtitle `"MD · Course Instructor & Clinical Tutor"`.
+- **Photo Cropping & Framing Alignment**:
+  - Cropped and centered Dr. Aftab's headshot to match Dr. Rohan's bust framing (face occupying ~58% of card height with matching ~13% top margin).
+  - Preserved original full uncropped headshot at `marketing-site/public/dr-aftab-full.jpg` and `backup/original-single-founder/dr-aftab.jpg`.
+- **Pre-Rollout Backup & Restoration Safety**:
+  - Preserved the pre-change single-founder version in `backup/original-single-founder/` along with a comprehensive [README.md](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/backup/README.md) and one-line restore commands.
+- **SEO & Schema Alignment ([layout.tsx](file:///c:/Users/Ashhad/Projects/ConceptsToClinics/marketing-site/src/app/layout.tsx))**:
+  - Preserved `founder` as Dr. Aftab Ali in JSON-LD `EducationalOrganization` schema; registered Dr. Rohan Lal under the `instructor` array.
+- **Build Verification**:
+  - Ran `npm run build` — Next.js compiled all 15 routes with zero errors.
+
+---
+
 ## Next Steps / Active Tasks 🚀
 - Confirm Bunny CDN has `concepts-to-clinics-v1.0.4.apk` uploaded and reachable at `https://conceptstoclinics.b-cdn.net/concepts-to-clinics-v1.0.4.apk`.
 - If Google Play Console internal/closed testing track is needed, run `./gradlew bundleRelease` via junction `C:\ctc\android` to generate the matching signed `.aab` file.
 - Inform students updating from older v1.0.2/v1.0.3 builds that a one-time uninstall is required due to the transition from the legacy debug signing to the permanent release keystore.
+
